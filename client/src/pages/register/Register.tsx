@@ -1,10 +1,49 @@
-import { Link } from "react-router-dom";
+import { FormEvent, useState, useContext } from 'react'
+import { Link, useNavigate } from "react-router-dom";
 
 import { Box, Button, Card, CardContent, FormControl, Input, InputLabel, Typography } from "@mui/material";
 
+import { AuthContext, createUserInFirebase } from '../../contexts/AuthContext';
 import { User } from "../../types/types";
 
 const Register = () => {
+  
+  const [newUser, setNewUser] = useState(
+    {
+      email: '',
+      password: '',
+      name: '',
+    }
+  );
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const createUserInDb = (user: User) => {
+    fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await createUserInFirebase(newUser.email, newUser.password);
+      createUserInDb(newUser);
+      userContext?.setActiveUser(newUser);
+      console.log(newUser);
+      navigate('/dashboard');
+    } catch(err: any) {
+      console.log(err.message)
+    }
+  }
+  
   return (
     <div className="home-bg">
       <Typography
@@ -60,6 +99,7 @@ const Register = () => {
               gap: '1rem',
               marginTop: '1rem'
             }}
+            onSubmit={handleSubmit}
             >
               <FormControl>
               <InputLabel htmlFor="name">Full Name</InputLabel>
@@ -68,6 +108,11 @@ const Register = () => {
                 type="text"
                 name="name"
                 id="name"
+                value={newUser.name}
+                onChange={(e) => setNewUser({
+                  ...newUser,
+                  name: e.target.value
+                })}
               ></Input>
             </FormControl>
             <FormControl>
@@ -77,6 +122,11 @@ const Register = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={newUser.email}
+                onChange={(e) => setNewUser({
+                  ...newUser,
+                  email: e.target.value
+                })}
               ></Input>
             </FormControl>
             <FormControl>
@@ -86,6 +136,11 @@ const Register = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={newUser.password}
+                onChange={(e) => setNewUser({
+                  ...newUser,
+                  password: e.target.value
+                })}
               ></Input>
             </FormControl>
             <FormControl>
@@ -95,6 +150,8 @@ const Register = () => {
                 type="password"
                 name="confirm-password"
                 id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               ></Input>
             </FormControl>
             <Button
