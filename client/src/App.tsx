@@ -1,11 +1,18 @@
 import React from 'react';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
+import './App.css';
+import Dashboard from './pages/dashboard/Dashboard';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
+
+const App = () => {
   return (
-    <div className="App">
-      App
-    </div>
+    <Routes>
+      <Route path='/' element={<Login />} />
+      <Route path='/register' element={<Register />} />
+      <Route path='/dashboard' element={<Dashboard />} />
+    </Routes>
   );
 }
 
