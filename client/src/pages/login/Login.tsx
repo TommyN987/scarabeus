@@ -1,8 +1,31 @@
-import { Link } from "react-router-dom";
+import { useState, useContext, FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Box, Button, Card, CardContent, FormControl, Input, InputLabel, Typography } from "@mui/material";
 
+import { AuthContext, loginUser } from "../../contexts/AuthContext";
+
 const Login = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const loggedInUser = await loginUser(email, password);
+      console.log(loggedInUser)
+      navigate('/dashboard')
+    } catch(err: any) {
+      console.log(err.message);
+      alert('Invalid email or password');
+    }
+  }
+
   return (
     <div className="home-bg">
       <Typography
@@ -58,6 +81,7 @@ const Login = () => {
               gap: '1rem',
               marginTop: '1rem'
             }}
+            onSubmit={handleSubmit}
             >
             <FormControl>
               <InputLabel htmlFor="email">Email</InputLabel>
@@ -66,6 +90,8 @@ const Login = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               ></Input>
             </FormControl>
             <FormControl>
@@ -75,6 +101,8 @@ const Login = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               ></Input>
             </FormControl>
             <Button

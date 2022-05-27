@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import registerRoute from './routes/register-route.js'
+import loginRoute from './routes/login-route.js'
+import registerRoute from './routes/register-route.js';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+app.use('/', loginRoute)
 app.use('/register', registerRoute)
 
 mongoose.connect(process.env.CONNECTION_URL, {
