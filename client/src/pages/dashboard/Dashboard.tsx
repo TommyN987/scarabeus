@@ -1,12 +1,23 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@mui/material';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext, logoutUser } from '../../contexts/AuthContext';
 
 const Dashboard = () => {
 
   const userContext = useContext(AuthContext);
-  console.log(userContext?.activeUser)
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      userContext?.setActiveUser(null);
+      navigate('/');
+    } catch(err: any) {
+      console.log(err.message)
+    }
+  }
 
   return (
     <>
@@ -14,6 +25,7 @@ const Dashboard = () => {
       <div>User: {userContext && userContext.activeUser ? userContext.activeUser.name : 'test'}</div>
       <Button 
         variant='contained'
+        onClick={handleLogout}
         >Logout
       </Button>
     </>
