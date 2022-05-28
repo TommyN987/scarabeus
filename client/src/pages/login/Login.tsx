@@ -13,13 +13,24 @@ const Login = () => {
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const findUsersInDb = async (email: string) => {
+    const user = await fetch(`http://localhost:5000/${email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const res = await user.json();
+    console.log(res);
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
       const loggedInUser = await loginUser(email, password);
-      console.log(loggedInUser)
-      navigate('/dashboard')
+      console.log(loggedInUser);
+      findUsersInDb(email);
     } catch(err: any) {
       console.log(err.message);
       alert('Invalid email or password');

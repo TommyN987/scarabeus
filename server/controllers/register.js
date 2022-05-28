@@ -6,7 +6,8 @@ export const getRegisterPage = (req, res) => {
 
 export const createUser = async (req, res) => {
   const user = req.body;
-  const newUser = new User(user);
+  const { email, password, name } = user
+  const newUser = new User({email, password, name});
 
   try {
     await newUser.save();
