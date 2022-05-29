@@ -13,6 +13,8 @@ const Register = () => {
       email: '',
       password: '',
       name: '',
+      role: 'Submitter',
+      projects: []
     }
   );
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -32,6 +34,20 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (newUser.password !== confirmPassword) {
+      alert("Passwords don't match");
+      return
+    } else if (newUser.password.length < 6 || newUser.password.length > 20) {
+      alert('Password must contain between 6 and 20 characters');
+      return
+    } else if (newUser.password.match(/[A-Z]/) === null) {
+      alert('Password must contain a capital letter');
+      return
+    } else if (newUser.password.match(/[1-9]/) === null) {
+      alert('Password must contain a number');
+      return
+    }
 
     try {
       await createUserInFirebase(newUser.email, newUser.password);

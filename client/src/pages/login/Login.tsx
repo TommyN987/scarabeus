@@ -21,16 +21,25 @@ const Login = () => {
       }
     });
     const res = await user.json();
-    console.log(res);
+    return res;
   }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
-      const loggedInUser = await loginUser(email, password);
-      console.log(loggedInUser);
-      findUsersInDb(email);
+      // login with firebase
+      await loginUser(email, password);
+      // get user data from db
+      const loggedInUser = await findUsersInDb(email);
+      userContext?.setActiveUser({
+        email: loggedInUser.email,
+        password: loggedInUser.password,
+        name: loggedInUser.name,
+        role: loggedInUser.role,
+        projects: loggedInUser.projects,
+      });
+      navigate('/dashboard')
     } catch(err: any) {
       console.log(err.message);
       alert('Invalid email or password');
