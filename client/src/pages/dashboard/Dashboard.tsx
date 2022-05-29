@@ -22,7 +22,7 @@ const Dashboard = () => {
   return (
     <>
       <h1>Dashboard</h1>
-      <div>User: {userContext && userContext.activeUser ? userContext.activeUser.name : 'test'}</div>
+      <div>User: {userContext && userContext.activeUser ? userContext.activeUser.name : null}</div>
       <Button 
         variant='contained'
         onClick={handleLogout}

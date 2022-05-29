@@ -2,6 +2,10 @@ export type AuthContextProviderProps = {
   children: React.ReactNode
 }
 
+export type ProtectedRouteProps = {
+  children: React.ReactNode
+}
+
 export type AuthContextType = {
   activeUser: User | null,
   setActiveUser: React.Dispatch<React.SetStateAction<User | null>>,
