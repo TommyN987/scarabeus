@@ -19,3 +19,14 @@ html {
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.brand {
+  display: flex;
+  padding: .5rem 1rem .5rem .5rem;
+}
+
+.logo {
+  height: 3.2rem;
+  width: 2.8rem;
+  margin-right: .5rem;
+}

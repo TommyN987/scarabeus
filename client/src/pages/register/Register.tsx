@@ -100,7 +100,7 @@ const Register = () => {
         <CardContent>
           <Typography 
             component="h2"
-            fontSize='1.5rem'
+            fontSize='2rem'
             fontWeight={600}
             textAlign='center'
             color='primary'
@@ -175,6 +175,7 @@ const Register = () => {
               variant="contained"
               sx={{
                 marginTop: '1rem',
+                fontSize: '1.2rem'
               }}
               >Register</Button>
           </Box>
