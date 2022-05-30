@@ -1,33 +1,18 @@
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { Button } from '@mui/material';
-import { AuthContext, logoutUser } from '../../contexts/AuthContext';
+import { Routes, Route } from "react-router-dom"
+import Sidebar from "../../components/sidebar/Sidebar"
+import Users from "../../components/users/Users"
 
 const Dashboard = () => {
 
-  const userContext = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      userContext?.setActiveUser(null);
-      navigate('/');
-    } catch(err: any) {
-      console.log(err.message)
-    }
-  }
-
   return (
     <>
-      <h1>Dashboard</h1>
-      <div>User: {userContext && userContext.activeUser ? userContext.activeUser.name : null}</div>
-      <Button 
-        variant='contained'
-        onClick={handleLogout}
-        >Logout
-      </Button>
+      <Sidebar />
+      <Routes>
+        <Route path="users" element={<Users />} />
+        <Route path="projects" />
+        <Route path="tickets" />
+        <Route path="profile" />
+      </Routes>
     </>
   )
 }
