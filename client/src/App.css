@@ -35,6 +35,14 @@ html {
   margin-right: .5rem;
 }
 
+.sidebar-nav {
+  cursor: pointer;
+}
+
+.sidebar-nav:hover {
+  background-color: #c0d9f1;
+}
+
 .app-bar {
   height: 70px;
   width: calc(100vw - 250px);

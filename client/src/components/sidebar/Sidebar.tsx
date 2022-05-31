@@ -33,35 +33,6 @@ const Sidebar = () => {
     }
   }
 
-  const menuItems = [
-    {
-      text: 'Dashboard Home',
-      icon: <DashboardIcon />,
-      path: '/dashboard',
-      visibleFor: ''
-    },
-    {
-      text: 'Manage Users',
-      icon: <GroupIcon />,
-      path: '/dashboard/users'
-    },
-    {
-      text: 'My Projects',
-      icon: <TopicIcon />,
-      path: '/dashboard/projects'
-    },
-    {
-      text: 'My Tickets',
-      icon: <AssignmentIcon />,
-      path: '/dashboard/tickets'
-    },
-    {
-      text: 'User Profile',
-      icon: <PersonIcon />,
-      path: '/dashboard/profile'
-    },
-  ]
-
   return (
     <>
       <div className="app-bar">
@@ -125,21 +96,36 @@ const Sidebar = () => {
           </div>
         </div>
         <List>
-          {menuItems.map(item => (
             <ListItem 
-              key={item.text}
-              sx={{
-                cursor: 'pointer',
-                ':hover': {
-                  backgroundColor: '#c0d9f1'
-                }
-              }}
-              onClick={() => navigate(item.path)}
-              >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              className='sidebar-nav'
+              onClick={() => navigate('/dashboard')}>
+              <ListItemIcon><DashboardIcon /></ListItemIcon>
+              <ListItemText primary='Dashboard Home' />
             </ListItem>
-          ))}
+            {userContext?.activeUser?.role === 'Admin' && <ListItem 
+              className='sidebar-nav'
+              onClick={() => navigate('/dashboard/users')}>
+              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemText primary='Manage Users' />
+            </ListItem>}
+            <ListItem 
+              className='sidebar-nav'
+              onClick={() => navigate('/dashboard/projects')}>
+              <ListItemIcon><TopicIcon /></ListItemIcon>
+              <ListItemText primary='My Projects' />
+            </ListItem>
+            <ListItem 
+              className='sidebar-nav'
+              onClick={() => navigate('/dashboard/tickets')}>
+              <ListItemIcon><AssignmentIcon /></ListItemIcon>
+              <ListItemText primary='My Tickets' />
+            </ListItem>
+            <ListItem 
+              className='sidebar-nav'
+              onClick={() => navigate('/dashboard/profile')}>
+              <ListItemIcon><PersonIcon /></ListItemIcon>
+              <ListItemText primary='User Profile' />
+            </ListItem>
         </List>
       </Drawer>
     </>
