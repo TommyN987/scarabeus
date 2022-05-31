@@ -23,28 +23,30 @@ import { User, UserDB } from "../../types/types";
 
 const Users = () => {
 
-  const [allUsers, setAllUsers] = useState<User[]>([])
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
 
+  const fetchAllUsers = async () => {
+    const allUsersInDb: User[] = [];
+    const response = await fetch('http://localhost:5000/dashboard/users');
+    const users: UserDB[] = await response.json();
+    users.forEach((user: UserDB) => {
+      const userToAdd: User = {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+        projects: user.projects
+      };
+      allUsersInDb.push(userToAdd);
+    });
+    setAllUsers(allUsersInDb);
+  };
+
   useEffect(() => {
-    fetch('http://localhost:5000/dashboard/users')
-      .then(res => res.json())
-      .then(users => {
-        const allUsersInDb: User[] = [];
-        users.forEach((user: UserDB) => {
-          const userToAdd: User = {
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            role: user.role,
-            projects: user.projects
-          };
-          allUsersInDb.push(userToAdd)
-        });
-        setAllUsers(allUsersInDb)
-      })
+    fetchAllUsers();
   },[])
   
   const roles = [
@@ -131,7 +133,7 @@ const Users = () => {
                   variant="contained"
                   endIcon={<SendIcon />}
                   sx={{
-                    width: '50%'
+                    width: '40%'
                   }}
                   >
                   Assign
@@ -172,7 +174,7 @@ const Users = () => {
                   color="error"
                   endIcon={<DeleteIcon />}
                   sx={{
-                    width: '50%'
+                    width: '40%'
                   }}
                   >
                   Delete
