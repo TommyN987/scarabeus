@@ -68,10 +68,14 @@ html {
 
 .table-head th {
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
 .table-body:nth-child(2n) {
   background-color: #e8eff6;
+}
+
+.table-body td {
+  font-size: 1.2rem;
 }

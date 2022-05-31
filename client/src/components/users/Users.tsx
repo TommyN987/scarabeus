@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container";
@@ -30,8 +30,8 @@ const Users = () => {
 
   const fetchAllUsers = async () => {
     const allUsersInDb: User[] = [];
-    const response = await fetch('http://localhost:5000/dashboard/users');
-    const users: UserDB[] = await response.json();
+    const res = await fetch('http://localhost:5000/dashboard/users');
+    const users: UserDB[] = await res.json();
     users.forEach((user: UserDB) => {
       const userToAdd: User = {
         name: user.name,
@@ -47,7 +47,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchAllUsers();
-  },[])
+  },[allUsers])
   
   const roles = [
     'Admin',
@@ -67,6 +67,18 @@ const Users = () => {
   const handleSelectedUserToDeleteChange = (e: SelectChangeEvent) => {
     setSelectedUserToDelete(e.target.value)
   };
+
+  const handleRoleAssignment = async (name: string, role: string) => {
+    await fetch(`http://localhost:5000/dashboard/users/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: name, role: role})
+    });
+    setSelectedRole('');
+    setSelectedUser('');
+  }
 
   return (
     <div className="inner-content">
@@ -134,6 +146,10 @@ const Users = () => {
                   endIcon={<SendIcon />}
                   sx={{
                     width: '40%'
+                  }}
+                  onClick={(e: FormEvent) => {
+                    e.preventDefault();
+                    handleRoleAssignment(selectedUser, selectedRole);
                   }}
                   >
                   Assign

@@ -8,3 +8,13 @@ export const getUsers = async (req, res) => {
     res.status(404).json({ message: err.message})
   }
 }
+
+export const updateUserRole = async (req, res) => {
+  try {
+    const user = await User.updateOne({ name: req.body.name }, {$set: { role: req.body.role }});
+    res.status(200).json(user);
+    console.log(user)
+  } catch (err) {
+    res.status(404).json({ message: err.message})
+  }
+}

@@ -14,14 +14,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   const findUsersInDb = async (email: string) => {
-    const user = await fetch(`http://localhost:5000/${email}`, {
+    const res = await fetch(`http://localhost:5000/${email}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     });
-    const res = await user.json();
-    return res;
+    const user = await res.json();
+    return user;
   }
 
   const handleSubmit = async (e: FormEvent) => {
