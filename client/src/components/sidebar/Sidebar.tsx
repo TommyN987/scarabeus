@@ -68,9 +68,6 @@ const Sidebar = () => {
         <Typography
           variant="h6"
           sx={{
-            position: 'absolute',
-            left: '300px',
-            top: '18px',
             color: `${theme.palette.text.primary}`
           }}
           >
@@ -79,9 +76,6 @@ const Sidebar = () => {
         <Typography
           variant="h6"
           sx={{
-            position: 'absolute',
-            left: '600px',
-            top: '18px',
             color: `${theme.palette.text.primary}`
           }}
           >
@@ -93,9 +87,6 @@ const Sidebar = () => {
           size="medium"
           sx={{
             width: '150px',
-            position: 'absolute',
-            top: '1rem',
-            right: '2.6rem'
           }}
           onClick={handleLogout}
           >Logout
@@ -107,7 +98,7 @@ const Sidebar = () => {
         PaperProps={{
           sx: {
             backgroundColor: '#dde8f2',
-            width: '280px'
+            width: '250px'
           }
         }}
         >
@@ -145,11 +136,7 @@ const Sidebar = () => {
               }}
               onClick={() => navigate(item.path)}
               >
-              <ListItemIcon
-                sx={{
-                  color: '#592913'
-                }}
-                >{item.icon}</ListItemIcon>
+              <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItem>
           ))}

@@ -8,7 +8,7 @@ import { User } from "../../types/types";
 
 const Register = () => {
   
-  const [newUser, setNewUser] = useState(
+  const [newUser, setNewUser] = useState<User>(
     {
       email: '',
       password: '',

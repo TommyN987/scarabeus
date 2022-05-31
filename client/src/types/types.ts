@@ -15,6 +15,6 @@ export type User = {
   email: string,
   password: string,
   name: string,
-  role: string,
+  role: 'Admin' | 'Project Manager' | 'Developer' | 'Submitter',
   projects: string[]
 }

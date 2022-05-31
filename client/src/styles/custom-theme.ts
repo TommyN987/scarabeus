@@ -6,7 +6,7 @@ export const theme = createTheme({
   },
   palette: {
     text: {
-      primary: '#592913'
+      primary: '#000'
     }
   }
 })
