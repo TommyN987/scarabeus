@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container";
@@ -19,47 +19,39 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import { User, UserDB } from "../../types/types";
+
 const Users = () => {
 
+  const [allUsers, setAllUsers] = useState<User[]>([])
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
 
-  const users = [
-    'Tommy',
-    'Katika',
-    'Lianka',
-    'Jony'
-  ];
+  useEffect(() => {
+    fetch('http://localhost:5000/dashboard/users')
+      .then(res => res.json())
+      .then(users => {
+        const allUsersInDb: User[] = [];
+        users.forEach((user: UserDB) => {
+          const userToAdd: User = {
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            role: user.role,
+            projects: user.projects
+          };
+          allUsersInDb.push(userToAdd)
+        });
+        setAllUsers(allUsersInDb)
+      })
+  },[])
   
   const roles = [
     'Admin',
     'Project Manager',
     'Developer',
     'Submitter'
-  ];
-
-  const usersWithRoles = [
-    {
-      name: 'Tommy',
-      email: 'tom@tom.com',
-      role: 'Admin'
-    },
-    {
-      name: 'Katika',
-      email: 'kati@kati.com',
-      role: 'Project Manager'
-    },
-    {
-      name: 'Lianka',
-      email: 'lianka@lianka.com',
-      role: 'Developer'
-    },
-    {
-      name: 'Jony',
-      email: 'jony@jony.com',
-      role: 'Submitter'
-    },
   ];
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {
@@ -106,11 +98,11 @@ const Users = () => {
                     }}
                     onChange={handleSelectedUserChange}
                     >
-                    {users.map(user => (
+                    {allUsers.map(user => (
                       <MenuItem
-                        key={user}
-                        value={user}
-                        >{user}</MenuItem>
+                        key={user.email}
+                        value={user.name}
+                        >{user.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -166,11 +158,11 @@ const Users = () => {
                     }}
                     onChange={handleSelectedUserToDeleteChange}
                     >
-                    {users.map(user => (
+                    {allUsers.map(user => (
                       <MenuItem
-                        key={user}
-                        value={user}
-                        >{user}</MenuItem>
+                        key={user.email}
+                        value={user.name}
+                        >{user.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -227,7 +219,7 @@ const Users = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {usersWithRoles.map(user => (
+                    {allUsers.map(user => (
                       <TableRow className="table-body" key={user.email}>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.email}</TableCell>

@@ -18,3 +18,13 @@ export type User = {
   role: 'Admin' | 'Project Manager' | 'Developer' | 'Submitter',
   projects: string[]
 }
+
+export type UserDB = {
+  email: string,
+  password: string,
+  name: string,
+  role: 'Admin' | 'Project Manager' | 'Developer' | 'Submitter',
+  projects: string[],
+  _id: string,
+  __v: number
+}
