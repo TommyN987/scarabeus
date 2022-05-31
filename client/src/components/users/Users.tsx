@@ -11,7 +11,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -27,6 +26,13 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
+
+  const roles = [
+    'Admin',
+    'Project Manager',
+    'Developer',
+    'Submitter'
+  ];
 
   const fetchAllUsers = async () => {
     const allUsersInDb: User[] = [];
@@ -48,13 +54,6 @@ const Users = () => {
   useEffect(() => {
     fetchAllUsers();
   },[allUsers])
-  
-  const roles = [
-    'Admin',
-    'Project Manager',
-    'Developer',
-    'Submitter'
-  ];
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {
     setSelectedUser(e.target.value)
@@ -69,7 +68,7 @@ const Users = () => {
   };
 
   const handleRoleAssignment = async (name: string, role: string) => {
-    await fetch(`http://localhost:5000/dashboard/users/`, {
+    await fetch('http://localhost:5000/dashboard/users/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -78,6 +77,17 @@ const Users = () => {
     });
     setSelectedRole('');
     setSelectedUser('');
+  };
+
+  const handleDelete = async (name: string) => {
+    await fetch('http://localhost:5000/dashboard/users/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: name })
+    });
+    setSelectedUserToDelete('');
   }
 
   return (
@@ -191,6 +201,10 @@ const Users = () => {
                   endIcon={<DeleteIcon />}
                   sx={{
                     width: '40%'
+                  }}
+                  onClick={(e: FormEvent) => {
+                    e.preventDefault();
+                    handleDelete(selectedUserToDelete);
                   }}
                   >
                   Delete

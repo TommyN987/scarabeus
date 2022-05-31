@@ -5,16 +5,24 @@ export const getUsers = async (req, res) => {
     const users = await User.find();
     res.status(200).json(users);
   } catch (err) {
-    res.status(404).json({ message: err.message})
-  }
-}
+    res.status(404).json({ message: err.message});
+  };
+};
 
 export const updateUserRole = async (req, res) => {
   try {
     const user = await User.updateOne({ name: req.body.name }, {$set: { role: req.body.role }});
     res.status(200).json(user);
-    console.log(user)
+  } catch (err) {
+    res.status(404).json({ message: err.message});
+  };
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.deleteOne({ name: req.body.name });
+    res.status(200).json(user);
   } catch (err) {
     res.status(404).json({ message: err.message})
-  }
-}
+  };
+};
