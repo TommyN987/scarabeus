@@ -11,6 +11,13 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
 const Users = () => {
 
   const [selectedUser, setSelectedUser] = useState('');
@@ -29,6 +36,29 @@ const Users = () => {
     'Project Manager',
     'Developer',
     'Submitter'
+  ];
+
+  const usersWithRoles = [
+    {
+      name: 'Tommy',
+      email: 'tom@tom.com',
+      role: 'Admin'
+    },
+    {
+      name: 'Katika',
+      email: 'kati@kati.com',
+      role: 'Project Manager'
+    },
+    {
+      name: 'Lianka',
+      email: 'lianka@lianka.com',
+      role: 'Developer'
+    },
+    {
+      name: 'Jony',
+      email: 'jony@jony.com',
+      role: 'Submitter'
+    },
   ];
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {
@@ -153,6 +183,51 @@ const Users = () => {
               Delete
             </Button>
           </form>
+        </Paper>
+      </Container>
+      <Container>
+        <Paper
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '1.5rem'
+          }}
+          >
+          <Typography
+            variant="h4"
+            fontWeight={600}
+            >
+            All Personnel
+          </Typography>
+          <TableContainer
+            sx={{
+              marginTop: '1rem'
+            }}
+            >
+            <Table>
+              <TableHead
+                sx={{
+                  backgroundColor: '#000'
+                }}
+                >
+                <TableRow className='table-head'>
+                  <TableCell>User Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Role</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {usersWithRoles.map(user => (
+                  <TableRow className="table-body" key={user.email}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.role}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Paper>
       </Container>
     </div>
