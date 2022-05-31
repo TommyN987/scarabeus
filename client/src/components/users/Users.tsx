@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -75,161 +76,171 @@ const Users = () => {
 
   return (
     <div className="inner-content">
-      <Container
-        sx={{
-          padding: '1.5rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.5rem'
-        }}
-        >
-        <Paper>
-          <form className="user-roles-form">
-            <Typography
-              variant="h4"
-              fontWeight={600}
-              >
-              Manage User Roles
-            </Typography>
-            <FormControl sx={{width: '100%'}}>
-              <InputLabel id="user-select-label">Select a User</InputLabel>
-              <Select
-                labelId="user-select-label"
-                id="user-select"
-                value={selectedUser}
-                label="Select a User"
-                sx={{
-                  width: '100%'
-                }}
-                onChange={handleSelectedUserChange}
-                >
-                {users.map(user => (
-                  <MenuItem
-                    key={user}
-                    value={user}
-                    >{user}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{width: '100%'}}>
-              <InputLabel id="role-select-label">Select a Role to Assign</InputLabel>
-              <Select
-                labelId="role-select-label"
-                id="role-select"
-                value={selectedRole}
-                label="Select a Role to Assign"
-                sx={{
-                  width: '100%'
-                }}
-                onChange={handleSelectedRoleChange}
-                >
-                {roles.map(role => (
-                  <MenuItem
-                    key={role}
-                    value={role}
-                    >{role}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button
-              type="submit"
-              variant="contained"
-              endIcon={<SendIcon />}
-              sx={{
-                width: '50%'
-              }}
-              >
-              Assign
-            </Button>
-          </form>
-        </Paper>
-        <Paper>
-          <form className="user-roles-form">
-            <Typography
-              variant="h4"
-              fontWeight={600}
-              >
-              Delete User
-            </Typography>
-            <FormControl sx={{width: '100%'}}>
-              <InputLabel id="user-delete-label">Select a User to Delete</InputLabel>
-              <Select
-                labelId="user-delete-label"
-                id="user-delete"
-                value={selectedUserToDelete}
-                label="Select a User to Delete"
-                sx={{
-                  width: '100%'
-                }}
-                onChange={handleSelectedUserToDeleteChange}
-                >
-                {users.map(user => (
-                  <MenuItem
-                    key={user}
-                    value={user}
-                    >{user}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button
-              type="submit"
-              variant="contained"
-              color="error"
-              endIcon={<DeleteIcon />}
-              sx={{
-                width: '50%'
-              }}
-              >
-              Delete
-            </Button>
-          </form>
-        </Paper>
-      </Container>
-      <Container>
-        <Paper
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '1.5rem'
-          }}
-          >
-          <Typography
-            variant="h4"
-            fontWeight={600}
-            >
-            All Personnel
-          </Typography>
-          <TableContainer
+      <Grid container>
+        <Grid item xs={12} lg={4}>
+          <Container
             sx={{
-              marginTop: '1rem'
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.5rem'
             }}
             >
-            <Table>
-              <TableHead
+            <Paper>
+              <form className="user-roles-form">
+                <Typography
+                  variant="h4"
+                  fontWeight={600}
+                  >
+                  Manage User Roles
+                </Typography>
+                <FormControl sx={{width: '100%'}}>
+                  <InputLabel id="user-select-label">Select a User</InputLabel>
+                  <Select
+                    labelId="user-select-label"
+                    id="user-select"
+                    value={selectedUser}
+                    label="Select a User"
+                    sx={{
+                      width: '100%'
+                    }}
+                    onChange={handleSelectedUserChange}
+                    >
+                    {users.map(user => (
+                      <MenuItem
+                        key={user}
+                        value={user}
+                        >{user}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{width: '100%'}}>
+                  <InputLabel id="role-select-label">Select a Role to Assign</InputLabel>
+                  <Select
+                    labelId="role-select-label"
+                    id="role-select"
+                    value={selectedRole}
+                    label="Select a Role to Assign"
+                    sx={{
+                      width: '100%'
+                    }}
+                    onChange={handleSelectedRoleChange}
+                    >
+                    {roles.map(role => (
+                      <MenuItem
+                        key={role}
+                        value={role}
+                        >{role}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  endIcon={<SendIcon />}
+                  sx={{
+                    width: '50%'
+                  }}
+                  >
+                  Assign
+                </Button>
+              </form>
+            </Paper>
+            <Paper>
+              <form className="user-roles-form">
+                <Typography
+                  variant="h4"
+                  fontWeight={600}
+                  >
+                  Delete User
+                </Typography>
+                <FormControl sx={{width: '100%'}}>
+                  <InputLabel id="user-delete-label">Select a User to Delete</InputLabel>
+                  <Select
+                    labelId="user-delete-label"
+                    id="user-delete"
+                    value={selectedUserToDelete}
+                    label="Select a User to Delete"
+                    sx={{
+                      width: '100%'
+                    }}
+                    onChange={handleSelectedUserToDeleteChange}
+                    >
+                    {users.map(user => (
+                      <MenuItem
+                        key={user}
+                        value={user}
+                        >{user}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="error"
+                  endIcon={<DeleteIcon />}
+                  sx={{
+                    width: '50%'
+                  }}
+                  >
+                  Delete
+                </Button>
+              </form>
+            </Paper>
+          </Container>
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          <Container
+            sx={{
+              padding: '1.5rem'
+            }}
+            >
+            <Paper
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '1.5rem'
+              }}
+              >
+              <Typography
+                variant="h4"
+                fontWeight={600}
+                >
+                All Personnel
+              </Typography>
+              <TableContainer
                 sx={{
-                  backgroundColor: '#000'
+                  marginTop: '1rem'
                 }}
                 >
-                <TableRow className='table-head'>
-                  <TableCell>User Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {usersWithRoles.map(user => (
-                  <TableRow className="table-body" key={user.email}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.role}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Container>
+                <Table>
+                  <TableHead
+                    sx={{
+                      backgroundColor: '#000'
+                    }}
+                    >
+                    <TableRow className='table-head'>
+                      <TableCell>User Name</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Role</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {usersWithRoles.map(user => (
+                      <TableRow className="table-body" key={user.email}>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.role}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Container>
+        </Grid>
+      </Grid>
     </div>
   )
 }
