@@ -42,3 +42,12 @@ html {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
 }
+
+.inner-content {
+  width: calc(100vw - 280px);
+  height: calc(100vh - 70px);
+  background-color: blueviolet;
+  position: absolute;
+  top: 70px;
+  left: 280px;
+}

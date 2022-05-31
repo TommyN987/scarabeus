@@ -1,6 +1,6 @@
 const Users = () => {
   return (
-    <div>Usersvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv</div>
+    <div className="inner-content">Users</div>
   )
 }
 export default Users

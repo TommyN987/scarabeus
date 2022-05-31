@@ -1,5 +1,8 @@
 import { Routes, Route } from "react-router-dom"
+import Profile from "../../components/profile/Profile"
+import Projects from "../../components/projects/Projects"
 import Sidebar from "../../components/sidebar/Sidebar"
+import Tickets from "../../components/tickets/Tickets"
 import Users from "../../components/users/Users"
 
 const Dashboard = () => {
@@ -9,9 +12,9 @@ const Dashboard = () => {
       <Sidebar />
       <Routes>
         <Route path="users" element={<Users />} />
-        <Route path="projects" />
-        <Route path="tickets" />
-        <Route path="profile" />
+        <Route path="projects" element={<Projects />} />
+        <Route path="tickets" element={<Tickets />} />
+        <Route path="profile" element={<Profile />} />
       </Routes>
     </>
   )
