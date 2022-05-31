@@ -2,7 +2,8 @@ import { createContext, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  deleteUser
 } from 'firebase/auth';
 
 import { auth } from "../firebase";
@@ -20,6 +21,13 @@ export const loginUser = (email: string, password: string) => {
 
 export const logoutUser = () => {
   return signOut(auth)
+}
+
+export const deleteUserFromFirebase = async (currentUserEmail: string, currentUserPassword: string, deletedUserEmail: string, deletedUserPassword: string) => {
+  await signInWithEmailAndPassword(auth, deletedUserEmail, deletedUserPassword);
+  const user: any = auth.currentUser;
+  await deleteUser(user);
+  return signInWithEmailAndPassword(auth, currentUserEmail, currentUserPassword);
 }
 
 export const AuthContextProvider = ({children}: AuthContextProviderProps) => {

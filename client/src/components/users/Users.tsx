@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useContext } from "react";
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container";
@@ -19,6 +19,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { User, UserDB } from "../../types/types";
+import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
 
 const Users = () => {
 
@@ -26,6 +27,8 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
+
+  const userContext = useContext(AuthContext);
 
   const roles = [
     'Admin',
@@ -53,7 +56,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchAllUsers();
-  },[allUsers])
+  },[allUsers]);
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {
     setSelectedUser(e.target.value)
@@ -63,8 +66,8 @@ const Users = () => {
     setSelectedRole(e.target.value)
   };
 
-  const handleSelectedUserToDeleteChange = (e: SelectChangeEvent) => {
-    setSelectedUserToDelete(e.target.value)
+  const handleSelectedUserToDeleteChange = async (e: SelectChangeEvent) => {
+    setSelectedUserToDelete(e.target.value);
   };
 
   const handleRoleAssignment = async (name: string, role: string) => {
@@ -79,14 +82,25 @@ const Users = () => {
     setSelectedUser('');
   };
 
-  const handleDelete = async (name: string) => {
+  const findUserToDelete = (email: string) => {
+    const userToDelete = allUsers.find(user => user.email === email);
+    return userToDelete;
+  }
+
+  const handleDelete = async (email: string) => {
     await fetch('http://localhost:5000/dashboard/users/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name: name })
+      body: JSON.stringify({ email: email })
     });
+    const userToDelete = findUserToDelete(email);
+    
+    if (userContext && userContext.activeUser && userToDelete) {
+      deleteUserFromFirebase(userContext?.activeUser?.email, userContext?.activeUser?.password, userToDelete?.email, userToDelete?.password)
+    }
+    
     setSelectedUserToDelete('');
   }
 
@@ -189,8 +203,9 @@ const Users = () => {
                     {allUsers.map(user => (
                       <MenuItem
                         key={user.email}
-                        value={user.name}
-                        >{user.name}</MenuItem>
+                        value={user.email}
+                        >{user.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
