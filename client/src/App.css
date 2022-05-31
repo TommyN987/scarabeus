@@ -38,7 +38,7 @@ html {
 .app-bar {
   height: 70px;
   width: calc(100vw - 250px);
-  position: absolute;
+  position: fixed;
   left: 250px;
   background-color: #dde8f2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -55,6 +55,7 @@ html {
   position: absolute;
   top: 70px;
   left: 250px;
+  overflow-y: auto;
 }
 
 .user-roles-form {

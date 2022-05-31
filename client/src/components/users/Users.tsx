@@ -92,7 +92,7 @@ const Users = () => {
                   variant="h4"
                   fontWeight={600}
                   >
-                  Manage User Roles
+                  Assign Role
                 </Typography>
                 <FormControl sx={{width: '100%'}}>
                   <InputLabel id="user-select-label">Select a User</InputLabel>
@@ -217,7 +217,7 @@ const Users = () => {
                 <Table>
                   <TableHead
                     sx={{
-                      backgroundColor: '#000'
+                      backgroundColor: '#1976d2'
                     }}
                     >
                     <TableRow className='table-head'>
