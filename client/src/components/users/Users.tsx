@@ -100,7 +100,6 @@ const Users = () => {
     if (userContext && userContext.activeUser && userToDelete) {
       deleteUserFromFirebase(userContext?.activeUser?.email, userContext?.activeUser?.password, userToDelete?.email, userToDelete?.password)
     }
-    
     setSelectedUserToDelete('');
   }
 

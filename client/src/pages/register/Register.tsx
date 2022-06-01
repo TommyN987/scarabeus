@@ -1,7 +1,14 @@
 import { FormEvent, useState, useContext } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 
-import { Box, Button, Card, CardContent, FormControl, Input, InputLabel, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import Typography from '@mui/material/Typography';
 
 import { AuthContext, createUserInFirebase } from '../../contexts/AuthContext';
 import { User } from "../../types/types";
