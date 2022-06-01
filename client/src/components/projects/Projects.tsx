@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,11 +10,14 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Chip from '@mui/material/Chip'
+import Chip from '@mui/material/Chip';
 
+import { Project, User } from '../../types/types';
+import { fetchAllUsers } from '../../dbOperations';
 
 const Projects = () => {
 
+  const [allUsers, setAllUsers] = useState<User[]>([])
   const [openModal, setOpenModal] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
@@ -29,6 +32,42 @@ const Projects = () => {
     setNewProjectPersonnel(
       typeof value === 'string' ? value.split(',') : value,
     );
+  };
+
+  useEffect(() => {
+    fetchAllUsers()
+      .then(users => setAllUsers(users))
+      .catch(err => alert(err))
+  },[]);
+
+  const createProject = (project: Project) => {
+    fetch('http://localhost:5000/dashboard/projects', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(project)
+    })
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      createProject(
+        {
+          title: newProjectTitle,
+          description: newProjectDescription,
+          personnel: newProjectPersonnel,
+          tickets: []
+        }
+      )
+    } catch (error: any) {
+      console.log(error.message)
+    }
+    setNewProjectTitle('');
+    setNewProjectDescription('');
+    setNewProjectPersonnel([]);
+    handleCloseModal();
   };
 
   const names = [
@@ -76,7 +115,9 @@ const Projects = () => {
             >
             Create New Project
           </Typography>
-          <form className='new-project-form'>
+          <form 
+            className='new-project-form'
+            onSubmit={handleSubmit}>
             <FormControl>
               <InputLabel htmlFor='title'>Title</InputLabel>
               <Input
@@ -122,11 +163,11 @@ const Projects = () => {
                   </Box>;
                 }}
                 >
-                {names.map(name => (
+                {allUsers.map(user => (
                   <MenuItem
-                    key={name}
-                    value={name}>
-                    {name}
+                    key={user.name}
+                    value={user.name}>
+                    {user.name}
                   </MenuItem>
                 ))}
               </Select>

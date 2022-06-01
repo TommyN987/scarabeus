@@ -18,8 +18,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import { User, UserDB } from "../../types/types";
+import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
+import { fetchAllUsers } from "../../dbOperations";
 
 const Users = () => {
 
@@ -37,25 +38,10 @@ const Users = () => {
     'Submitter'
   ];
 
-  const fetchAllUsers = async () => {
-    const allUsersInDb: User[] = [];
-    const res = await fetch('http://localhost:5000/dashboard/users');
-    const users: UserDB[] = await res.json();
-    users.forEach((user: UserDB) => {
-      const userToAdd: User = {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        role: user.role,
-        projects: user.projects
-      };
-      allUsersInDb.push(userToAdd);
-    });
-    setAllUsers(allUsersInDb);
-  };
-
   useEffect(() => {
-    fetchAllUsers();
+    fetchAllUsers()
+      .then(users => setAllUsers(users))
+      .catch(err => alert(err))
   },[allUsers]);
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {

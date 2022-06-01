@@ -28,3 +28,10 @@ export type UserDB = {
   _id: string,
   __v: number
 }
+
+export type Project = {
+  title: string,
+  description: string,
+  personnel: string[],
+  tickets: {}[]
+}
