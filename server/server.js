@@ -6,7 +6,8 @@ import cors from 'cors';
 
 import loginRoute from './routes/login-route.js'
 import registerRoute from './routes/register-route.js';
-import usersRoute from './routes/users-route.js'
+import usersRoute from './routes/users-route.js';
+import projectsRoute from './routes/projects-route.js'
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors());
 app.use('/', loginRoute);
 app.use('/register', registerRoute);
 app.use('/dashboard/users', usersRoute);
+app.use('/dashboard/projects', projectsRoute);
 
 mongoose.connect(process.env.CONNECTION_URL, {
   useNewUrlParser: true,
