@@ -1,8 +1,8 @@
 import express from 'express';
-import { getLoggedIn } from '../controllers/login.js';
+import { loginUser } from '../controllers/users.js';
 
 const router = express.Router();
 
-router.get('/:email', getLoggedIn);
+router.get('/:email', loginUser);
 
 export default router;
