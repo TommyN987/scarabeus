@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Chip from '@mui/material/Chip';
 
 import { Project, User } from '../../types/types';
-import { fetchAllUsers } from '../../dbOperations';
+import { fetchAllUsers, updateUserProjects } from '../../dbOperations';
 
 const Projects = () => {
 
@@ -64,24 +64,20 @@ const Projects = () => {
     } catch (error: any) {
       console.log(error.message)
     }
+
+    try {
+      newProjectPersonnel.forEach(username => {
+        updateUserProjects(username, newProjectTitle)
+      })
+    } catch(error: any) {
+      console.log(error.message)
+    }
+
     setNewProjectTitle('');
     setNewProjectDescription('');
     setNewProjectPersonnel([]);
     handleCloseModal();
   };
-
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
 
   return (
     <div className="inner-content">

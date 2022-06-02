@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     default: 'Submitter'
   },
   projects: {
-    type: [mongoose.SchemaTypes.ObjectId],
+    type: [String],
     default: []
   }
 });

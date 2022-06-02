@@ -33,11 +33,22 @@ export const getUsers = async (req, res) => {
 
 export const updateUserRole = async (req, res) => {
   try {
-    const user = await User.updateOne({ name: req.body.name }, {$set: { role: req.body.role }});
+    const user = await User.findOne({ name: req.body.name }, {$set: { role: req.body.role }});
     res.status(200).json(user);
   } catch (err) {
     res.status(404).json({ message: err.message});
   };
+};
+
+export const updateUserProjects = async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.body.name });
+    user.projects = [...user.projects, req.body.projects];
+    user.save();
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
 };
 
 export const deleteUser = async (req, res) => {
