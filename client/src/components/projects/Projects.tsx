@@ -37,10 +37,11 @@ const Projects = () => {
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
+  const [activeProject, setActiveProject] = useState<Project | null>(null)
   const [trigger, setTrigger] = useState(false);
 
   const handleOpenCreationModal = () => setOpenCreationModal(true);
-  const handleCloseModal = () => setOpenCreationModal(false);
+  const handleCloseCreationModal = () => setOpenCreationModal(false);
   const handlePersonnelSelectChange = (e: SelectChangeEvent<typeof newProjectPersonnel>) => {
     const {
       target: { value },
@@ -50,6 +51,13 @@ const Projects = () => {
     );
   };
 
+  const handleOpenDetailsModal = async (project: string) => {
+    const fetchedProject = await fetchOneProject(project);
+    setActiveProject(fetchedProject)
+    setOpenDetailsModal(true)
+  };
+  const handleCloseDetailsModal = () => setOpenDetailsModal(false);
+
   useEffect(() => {
     fetchAllUsers()
       .then(users => setAllUsers(users))
@@ -58,7 +66,9 @@ const Projects = () => {
 
   useEffect(() => {
     fetchAllProjects()
-      .then(projects => setAllProjects(projects))
+      .then(projects => {
+        console.log(projects)
+        setAllProjects(projects)})
       .catch(err => alert(err))
   }, [trigger])
 
@@ -91,7 +101,7 @@ const Projects = () => {
     setNewProjectTitle('');
     setNewProjectDescription('');
     setNewProjectPersonnel([]);
-    handleCloseModal();
+    handleCloseCreationModal();
     setTrigger(trigger => !trigger)
   };
 
@@ -147,7 +157,10 @@ const Projects = () => {
                       </ul>
                     </TableCell>
                     <TableCell className='inline-icons'>
-                      <InfoIcon color='action' /><EditIcon color='action' /><DeleteIcon color='action' />
+                      <InfoIcon 
+                        color='action'
+                        onClick={() => handleOpenDetailsModal(project.title)}
+                        /><EditIcon color='action' /><DeleteIcon color='action' />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -168,7 +181,7 @@ const Projects = () => {
         </Button>
         <Modal
           open={openCreationModal}
-          onClose={handleCloseModal}
+          onClose={handleCloseCreationModal}
           >
           <Box
             sx={{
@@ -257,6 +270,33 @@ const Projects = () => {
                 }}
                 >Create</Button>
             </form>
+          </Box>
+        </Modal>
+        <Modal
+          open={openDetailsModal}
+          onClose={handleCloseDetailsModal}
+          >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '80px',
+              left: '50%',
+              transform: 'translate(-50%, 0)',
+              width: '500px',
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}
+            >
+            <Typography 
+              variant="h5"
+              color='primary'
+              fontWeight={600}
+              textAlign='center'
+              >
+              {activeProject?.title}
+            </Typography>
           </Box>
         </Modal>
       </Container>
