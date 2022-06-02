@@ -35,7 +35,7 @@ export const updateUserRole = async (name: string, role: string) => {
     },
     body: JSON.stringify({ name: name, role: role})
   });
-}
+};
 
 export const updateUserProjects = async (name: string, project: string) => {
   await fetch(`http://localhost:5000/dashboard/users`, {
@@ -44,5 +44,15 @@ export const updateUserProjects = async (name: string, project: string) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ name: name, projects: project})
-  })
+  });
+};
+
+export const deleteUser = async (email: string) => {
+  await fetch('http://localhost:5000/dashboard/users/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email })
+    });
 }

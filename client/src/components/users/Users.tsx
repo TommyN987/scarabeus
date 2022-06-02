@@ -20,7 +20,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
-import { fetchAllUsers, updateUserRole } from "../../dbOperations";
+import { fetchAllUsers, updateUserRole, deleteUser } from "../../dbOperations";
 
 const Users = () => {
 
@@ -65,26 +65,22 @@ const Users = () => {
     setTrigger(trigger => !trigger);
   };
 
-  const findUserToDelete = (email: string) => {
-    const userToDelete = allUsers.find(user => user.email === email);
-    return userToDelete;
-  }
-
-  const handleDelete = async (email: string) => {
-    await fetch('http://localhost:5000/dashboard/users/', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: email })
-    });
-    const userToDelete = findUserToDelete(email);
+  const handleDelete = (e: FormEvent) => {
+    e.preventDefault()
     
+    // DELETION FROM DB
+    deleteUser(selectedUserToDelete);
+
+    // DELETION FROM FIREBASE
+    const userToDelete = allUsers.find(user => user.email === selectedUserToDelete);
+
     if (userContext && userContext.activeUser && userToDelete) {
       deleteUserFromFirebase(userContext?.activeUser?.email, userContext?.activeUser?.password, userToDelete?.email, userToDelete?.password)
     }
+
     setSelectedUserToDelete('');
-  }
+    setTrigger(trigger => !trigger);
+  };
 
   return (
     <div className="inner-content">
@@ -196,10 +192,7 @@ const Users = () => {
                   sx={{
                     width: '40%'
                   }}
-                  onClick={(e: FormEvent) => {
-                    e.preventDefault();
-                    handleDelete(selectedUserToDelete);
-                  }}
+                  onClick={handleDelete}
                   >
                   Delete
                 </Button>
