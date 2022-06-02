@@ -1,4 +1,4 @@
-import { User, UserDB } from "./types/types";
+import { User, UserDB } from "../types/types";
 
 export const fetchAllUsers = async () => {
   const res = await fetch('http://localhost:5000/dashboard/users');
@@ -49,10 +49,10 @@ export const updateUserProjects = async (name: string, project: string) => {
 
 export const deleteUser = async (email: string) => {
   await fetch('http://localhost:5000/dashboard/users/', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: email })
-    });
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email: email })
+  });
 }

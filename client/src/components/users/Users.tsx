@@ -20,7 +20,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
-import { fetchAllUsers, updateUserRole, deleteUser } from "../../dbOperations";
+import { fetchAllUsers, updateUserRole, deleteUser } from "../../dbOperations/userOperations";
 
 const Users = () => {
 

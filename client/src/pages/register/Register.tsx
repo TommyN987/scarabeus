@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 
 import { AuthContext, createUserInFirebase } from '../../contexts/AuthContext';
-import { createUser } from '../../dbOperations';
+import { createUser } from '../../dbOperations/userOperations';
 import { User } from "../../types/types";
 
 const Register = () => {

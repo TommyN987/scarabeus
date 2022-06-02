@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Card, CardContent, FormControl, Input, InputLabel, Typography } from "@mui/material";
 
 import { AuthContext, loginUser } from "../../contexts/AuthContext";
-import { fetchOneUser } from "../../dbOperations";
+import { fetchOneUser } from "../../dbOperations/userOperations";
 
 const Login = () => {
 

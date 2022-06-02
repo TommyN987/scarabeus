@@ -12,8 +12,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Chip from '@mui/material/Chip';
 
-import { Project, User } from '../../types/types';
-import { fetchAllUsers, updateUserProjects } from '../../dbOperations';
+import { User } from '../../types/types';
+import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
+import { createProject } from '../../dbOperations/projectOperations';
 
 const Projects = () => {
 
@@ -39,16 +40,6 @@ const Projects = () => {
       .then(users => setAllUsers(users))
       .catch(err => alert(err))
   },[]);
-
-  const createProject = (project: Project) => {
-    fetch('http://localhost:5000/dashboard/projects', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(project)
-    })
-  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
