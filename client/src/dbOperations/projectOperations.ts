@@ -6,6 +6,18 @@ export const fetchAllProjects = async () => {
   return projects;
 }
 
+export const fetchOneProject = async (title: string) => {
+  const res = await fetch(`http://localhost:5000/dashboard/projects/${title}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const project = await res.json();
+  console.log(project)
+  return project;
+}
+
 export const createProject = async (project: Project) => {
   await fetch('http://localhost:5000/dashboard/projects', {
     method: 'POST',

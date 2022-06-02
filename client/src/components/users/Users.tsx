@@ -94,7 +94,7 @@ const Users = () => {
               gap: '1.5rem'
             }}
             >
-            <Paper>
+            <Paper elevation={10}>
               <form className="user-roles-form">
                 <Typography
                   variant="h4"
@@ -155,7 +155,7 @@ const Users = () => {
                 </Button>
               </form>
             </Paper>
-            <Paper>
+            <Paper elevation={10}>
               <form className="user-roles-form">
                 <Typography
                   variant="h4"
@@ -207,6 +207,7 @@ const Users = () => {
             }}
             >
             <Paper
+              elevation={10}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',

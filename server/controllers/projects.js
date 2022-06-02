@@ -9,6 +9,15 @@ export const getAllProjects = async (req, res) => {
   }
 }
 
+export const getOneProject = async (req, res) => {
+  try {
+    const project = await Project.findOne({ title: req.params.title });
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
+
 export const createProject = async (req, res) => {
   const project = req.body;
   const { title, description, personnel } = project;

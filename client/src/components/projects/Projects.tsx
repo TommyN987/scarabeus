@@ -26,20 +26,21 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import { User, Project } from '../../types/types';
 import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
-import { createProject, fetchAllProjects } from '../../dbOperations/projectOperations';
+import { createProject, fetchAllProjects, fetchOneProject } from '../../dbOperations/projectOperations';
 
 const Projects = () => {
 
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [allProjects, setAllProjects] = useState<Project[]>([])
-  const [openModal, setOpenModal] = useState(false);
+  const [openCreationModal, setOpenCreationModal] = useState(false);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
   const [trigger, setTrigger] = useState(false);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenCreationModal = () => setOpenCreationModal(true);
+  const handleCloseModal = () => setOpenCreationModal(false);
   const handlePersonnelSelectChange = (e: SelectChangeEvent<typeof newProjectPersonnel>) => {
     const {
       target: { value },
@@ -105,6 +106,7 @@ const Projects = () => {
         }}
         >
         <Paper
+          elevation={10}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -156,7 +158,7 @@ const Projects = () => {
         <Button 
           variant='contained'
           startIcon={<CreateNewFolderIcon />}
-          onClick={handleOpenModal}
+          onClick={handleOpenCreationModal}
           sx={{
             width: '30%',
             alignSelf: 'center'
@@ -165,7 +167,7 @@ const Projects = () => {
           Create New Project
         </Button>
         <Modal
-          open={openModal}
+          open={openCreationModal}
           onClose={handleCloseModal}
           >
           <Box
