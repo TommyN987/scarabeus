@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, useContext, FormEvent } from 'react';
 
 import Container from "@mui/material/Container";
 import Box from '@mui/material/Box';
@@ -24,6 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 
+import { AuthContext } from '../../contexts/AuthContext';
 import { User, Project } from '../../types/types';
 import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
 import { createProject, fetchAllProjects, fetchOneProject } from '../../dbOperations/projectOperations';
@@ -39,6 +40,8 @@ const Projects = () => {
   const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
   const [activeProject, setActiveProject] = useState<Project | null>(null)
   const [trigger, setTrigger] = useState(false);
+
+  const userContext = useContext(AuthContext);
 
   const handleOpenCreationModal = () => setOpenCreationModal(true);
   const handleCloseCreationModal = () => setOpenCreationModal(false);
@@ -67,10 +70,15 @@ const Projects = () => {
   useEffect(() => {
     fetchAllProjects()
       .then(projects => {
-        console.log(projects)
-        setAllProjects(projects)})
+        if (userContext?.activeUser?.role === 'Admin') {
+          setAllProjects(projects)
+        } else {
+          const projectsToDisplay = projects.filter(project => project.personnel.includes(userContext!.activeUser!.name));
+          setAllProjects(projectsToDisplay)
+        }
+      })
       .catch(err => alert(err))
-  }, [trigger])
+  }, [trigger, userContext])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
