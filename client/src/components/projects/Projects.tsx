@@ -61,6 +61,8 @@ const Projects = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    // CREATE PROJECT IN DB
     try {
       createProject(
         {
@@ -74,6 +76,7 @@ const Projects = () => {
       console.log(error.message)
     }
 
+    // UPDATES USER OBJECTS' PROJECT FIELDS WITH THE NEW PROJECT
     try {
       newProjectPersonnel.forEach(username => {
         updateUserProjects(username, newProjectTitle)
@@ -81,7 +84,7 @@ const Projects = () => {
     } catch(error: any) {
       console.log(error.message)
     }
-
+    
     setNewProjectTitle('');
     setNewProjectDescription('');
     setNewProjectPersonnel([]);
@@ -115,7 +118,7 @@ const Projects = () => {
             My Projects
           </Typography>
           <TableContainer sx={{ 
-            marginTop: '1rem',
+            marginTop: '2rem',
             overflow: 'auto'
             }}>
             <Table>

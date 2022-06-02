@@ -18,9 +18,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      // login with firebase
+      
+      // LOGIN WITH FIREBASE
       await loginUser(email, password);
-      // get user data from db
+
+      // FETCH USER DATA FROM DB TO SET USER CONTEXT
       const loggedInUser = await fetchOneUser(email);
       userContext?.setActiveUser({
         email: loggedInUser.email,
@@ -29,7 +31,8 @@ const Login = () => {
         role: loggedInUser.role,
         projects: loggedInUser.projects,
       });
-      navigate('/dashboard')
+      navigate('/dashboard');
+      
     } catch(err: any) {
       console.log(err.message);
       alert('Invalid email or password');

@@ -23,7 +23,12 @@ export const logoutUser = () => {
   return signOut(auth)
 }
 
-export const deleteUserFromFirebase = async (currentUserEmail: string, currentUserPassword: string, deletedUserEmail: string, deletedUserPassword: string) => {
+export const deleteUserFromFirebase = async (
+  currentUserEmail: string, 
+  currentUserPassword: string, 
+  deletedUserEmail: string, 
+  deletedUserPassword: string) => {
+  
   await signInWithEmailAndPassword(auth, deletedUserEmail, deletedUserPassword);
   const user: any = auth.currentUser;
   await deleteUser(user);

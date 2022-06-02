@@ -33,6 +33,7 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    // FORM VALIDATION
     if (newUser.password !== confirmPassword) {
       alert("Passwords don't match");
       return
@@ -48,11 +49,15 @@ const Register = () => {
     }
 
     try {
+      
+      // CREATE USER IN FIREBASE
       await createUserInFirebase(newUser.email, newUser.password);
-      createUser(newUser);
+      
+      // CREATE USER IN DB
+      await createUser(newUser);
       userContext?.setActiveUser(newUser);
-      console.log(newUser);
       navigate('/dashboard');
+
     } catch(err: any) {
       console.log(err.message)
     }
