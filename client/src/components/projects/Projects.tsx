@@ -22,17 +22,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 
-import { User } from '../../types/types';
+import { User, Project } from '../../types/types';
 import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
-import { createProject } from '../../dbOperations/projectOperations';
+import { createProject, fetchAllProjects } from '../../dbOperations/projectOperations';
 
 const Projects = () => {
 
-  const [allUsers, setAllUsers] = useState<User[]>([])
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>([])
   const [openModal, setOpenModal] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
+  const [trigger, setTrigger] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -45,34 +47,17 @@ const Projects = () => {
     );
   };
 
-  const projects = [
-    {
-      title: 'Project 1',
-      description: 'Description 1',
-      personnel: ['user1', 'user2', 'user3']
-    },
-    {
-      title: 'Project 2',
-      description: 'Description 2',
-      personnel: ['user1', 'user2', 'user3']
-    },
-    {
-      title: 'Project 3',
-      description: 'Description 3',
-      personnel: ['user1', 'user2', 'user3']
-    },
-    {
-      title: 'Project 4',
-      description: 'Description 4',
-      personnel: ['user1', 'user2', 'user3']
-    },
-  ]
-
   useEffect(() => {
     fetchAllUsers()
       .then(users => setAllUsers(users))
+      .catch(err => alert(err));
+  }, []);
+
+  useEffect(() => {
+    fetchAllProjects()
+      .then(projects => setAllProjects(projects))
       .catch(err => alert(err))
-  },[]);
+  }, [trigger])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -101,6 +86,7 @@ const Projects = () => {
     setNewProjectDescription('');
     setNewProjectPersonnel([]);
     handleCloseModal();
+    setTrigger(trigger => !trigger)
   };
 
   return (
@@ -142,14 +128,24 @@ const Projects = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {projects.map(project => (
+                {allProjects.map(project => (
                   <TableRow className='table-body' key={project.title}>
                     <TableCell>{project.title}</TableCell>
                     <TableCell>{project.description}</TableCell>
-                    <TableCell>{project.personnel.map(user => (
-                      <span className='project-table-personnel' key={user}>{user}</span>
-                    ))}</TableCell>
-                    <TableCell>Edit | Delete</TableCell>
+                    <TableCell>
+                      <ul>
+                        {project.personnel.map(user => (
+                        <li className='project-table-personnel' key={user}>{user}</li>
+                        ))}
+                      </ul>
+                    </TableCell>
+                    <TableCell>
+                      <ul>
+                        <li>Details</li>
+                        <li>Edit</li>
+                        <li>Delete</li>
+                      </ul>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

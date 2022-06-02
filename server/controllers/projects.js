@@ -1,5 +1,14 @@
 import Project from "../models/project.js";
 
+export const getAllProjects = async (req, res) => {
+  try {
+    const projects = await Project.find();
+    res.status(200).json(projects);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
+
 export const createProject = async (req, res) => {
   const project = req.body;
   const { title, description, personnel } = project;
