@@ -20,7 +20,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { User, Project } from '../../types/types';
 import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
@@ -142,12 +144,8 @@ const Projects = () => {
                         ))}
                       </ul>
                     </TableCell>
-                    <TableCell>
-                      <ul>
-                        <li>Details</li>
-                        <li>Edit</li>
-                        <li>Delete</li>
-                      </ul>
+                    <TableCell className='inline-icons'>
+                      <InfoIcon color='action' /><EditIcon color='action' /><DeleteIcon color='action' />
                     </TableCell>
                   </TableRow>
                 ))}

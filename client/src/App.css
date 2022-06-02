@@ -20,6 +20,10 @@ html {
   background-position: center;
 }
 
+li {
+  list-style:square;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -86,6 +90,11 @@ html {
 
 .table-body td {
   font-size: 1.2rem;
+}
+
+.inline-icons svg {
+  margin-right: 1rem;
+  cursor: pointer;
 }
 
 .new-project-form {
