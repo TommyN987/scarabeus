@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 
 import { AuthContext, createUserInFirebase } from '../../contexts/AuthContext';
+import { createUser } from '../../dbOperations';
 import { User } from "../../types/types";
 
 const Register = () => {
@@ -28,16 +29,6 @@ const Register = () => {
 
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const createUserInDb = (user: User) => {
-    fetch('http://localhost:5000/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    });
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -58,7 +49,7 @@ const Register = () => {
 
     try {
       await createUserInFirebase(newUser.email, newUser.password);
-      createUserInDb(newUser);
+      createUser(newUser);
       userContext?.setActiveUser(newUser);
       console.log(newUser);
       navigate('/dashboard');

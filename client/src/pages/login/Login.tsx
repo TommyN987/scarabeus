@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Card, CardContent, FormControl, Input, InputLabel, Typography } from "@mui/material";
 
 import { AuthContext, loginUser } from "../../contexts/AuthContext";
+import { fetchOneUser } from "../../dbOperations";
 
 const Login = () => {
 
@@ -13,17 +14,6 @@ const Login = () => {
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const findUsersInDb = async (email: string) => {
-    const res = await fetch(`http://localhost:5000/${email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const user = await res.json();
-    return user;
-  }
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -31,7 +21,7 @@ const Login = () => {
       // login with firebase
       await loginUser(email, password);
       // get user data from db
-      const loggedInUser = await findUsersInDb(email);
+      const loggedInUser = await fetchOneUser(email);
       userContext?.setActiveUser({
         email: loggedInUser.email,
         password: loggedInUser.password,

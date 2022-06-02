@@ -1,9 +1,30 @@
-import { UserDB } from "./types/types";
+import { User, UserDB } from "./types/types";
 
 export const fetchAllUsers = async () => {
   const res = await fetch('http://localhost:5000/dashboard/users');
   const users: UserDB[] = await res.json();
   return users;
+};
+
+export const fetchOneUser = async (email: string) => {
+  const res = await fetch(`http://localhost:5000/${email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const user = await res.json();
+  return user;
+};
+
+export const createUser = (user: User) => {
+  fetch('http://localhost:5000/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  });
 };
 
 export const updateUserProjects = async (name: string, project: string) => {
