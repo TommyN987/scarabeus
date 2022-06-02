@@ -17,8 +17,8 @@ export const fetchOneUser = async (email: string) => {
   return user;
 };
 
-export const createUser = (user: User) => {
-  fetch('http://localhost:5000/register', {
+export const createUser = async (user: User) => {
+  await fetch('http://localhost:5000/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -26,6 +26,16 @@ export const createUser = (user: User) => {
     body: JSON.stringify(user)
   });
 };
+
+export const updateUserRole = async (name: string, role: string) => {
+  await fetch('http://localhost:5000/dashboard/users', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: name, role: role})
+  });
+}
 
 export const updateUserProjects = async (name: string, project: string) => {
   await fetch(`http://localhost:5000/dashboard/users`, {

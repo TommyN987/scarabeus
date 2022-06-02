@@ -20,7 +20,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
-import { fetchAllUsers } from "../../dbOperations";
+import { fetchAllUsers, updateUserRole } from "../../dbOperations";
 
 const Users = () => {
 
@@ -28,6 +28,7 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
+  const [trigger, setTrigger] = useState(false);
 
   const userContext = useContext(AuthContext);
 
@@ -42,7 +43,7 @@ const Users = () => {
     fetchAllUsers()
       .then(users => setAllUsers(users))
       .catch(err => alert(err))
-  },[allUsers]);
+  },[trigger]);
 
   const handleSelectedUserChange = (e: SelectChangeEvent) => {
     setSelectedUser(e.target.value)
@@ -56,16 +57,12 @@ const Users = () => {
     setSelectedUserToDelete(e.target.value);
   };
 
-  const handleRoleAssignment = async (name: string, role: string) => {
-    await fetch('http://localhost:5000/dashboard/users/', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name: name, role: role})
-    });
+  const handleRoleAssignment = async (e: FormEvent) => {
+    e.preventDefault();
+    await updateUserRole(selectedUser, selectedRole)
     setSelectedRole('');
     setSelectedUser('');
+    setTrigger(trigger => !trigger);
   };
 
   const findUserToDelete = (email: string) => {
@@ -156,10 +153,7 @@ const Users = () => {
                   sx={{
                     width: '40%'
                   }}
-                  onClick={(e: FormEvent) => {
-                    e.preventDefault();
-                    handleRoleAssignment(selectedUser, selectedRole);
-                  }}
+                  onClick={handleRoleAssignment}
                   >
                   Assign
                 </Button>
