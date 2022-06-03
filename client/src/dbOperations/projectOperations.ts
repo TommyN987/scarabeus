@@ -14,7 +14,6 @@ export const fetchOneProject = async (title: string) => {
     }
   });
   const project = await res.json();
-  console.log(project)
   return project;
 }
 

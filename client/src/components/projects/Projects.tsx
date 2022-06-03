@@ -295,8 +295,8 @@ const Projects = () => {
                   }}
                 >
                   {allUsers.map((user) => (
-                    <MenuItem key={user.name} value={user.name}>
-                      {user.name}
+                    <MenuItem className='new-project-personnel' key={user.name} value={user.name}>
+                      <span>{user.name}</span><span>{user.role}</span>
                     </MenuItem>
                   ))}
                 </Select>

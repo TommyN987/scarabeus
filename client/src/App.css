@@ -104,6 +104,10 @@ li {
   margin-top: 1rem;
 }
 
+.new-project-personnel {
+  justify-content: space-between !important;
+}
+
 .project-details-header {
   display: flex;
   flex-direction: column;
