@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Drawer from "@mui/material/Drawer";
@@ -19,6 +19,8 @@ import { AuthContext, logoutUser } from '../../contexts/AuthContext';
 import { theme } from '../../styles/custom-theme';
 
 const Sidebar = () => {
+
+  const [activeTab, setActiveTab] = useState<'Dashboard' | 'Users' | 'Projects' | 'Tickets' | 'Profile'>('Dashboard')
 
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
@@ -97,32 +99,47 @@ const Sidebar = () => {
         </div>
         <List>
             <ListItem 
-              className='sidebar-nav'
-              onClick={() => navigate('/dashboard')}>
+              className={activeTab === 'Dashboard' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
+              onClick={() => {
+                navigate('/dashboard');
+                setActiveTab('Dashboard');
+                }}>
               <ListItemIcon><DashboardIcon /></ListItemIcon>
               <ListItemText primary='Dashboard Home' />
             </ListItem>
             {userContext?.activeUser?.role === 'Admin' && <ListItem 
-              className='sidebar-nav'
-              onClick={() => navigate('/dashboard/users')}>
+              className={activeTab === 'Users' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
+              onClick={() => {
+                navigate('/dashboard/users');
+                setActiveTab('Users');
+                }}>
               <ListItemIcon><GroupIcon /></ListItemIcon>
               <ListItemText primary='Manage Users' />
             </ListItem>}
             <ListItem 
-              className='sidebar-nav'
-              onClick={() => navigate('/dashboard/projects')}>
+              className={activeTab === 'Projects' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
+              onClick={() => {
+                navigate('/dashboard/projects');
+                setActiveTab('Projects');
+                }}>
               <ListItemIcon><TopicIcon /></ListItemIcon>
               <ListItemText primary='My Projects' />
             </ListItem>
             <ListItem 
-              className='sidebar-nav'
-              onClick={() => navigate('/dashboard/tickets')}>
+              className={activeTab === 'Tickets' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
+              onClick={() => {
+                navigate('/dashboard/tickets');
+                setActiveTab('Tickets');
+                }}>
               <ListItemIcon><AssignmentIcon /></ListItemIcon>
               <ListItemText primary='My Tickets' />
             </ListItem>
             <ListItem 
-              className='sidebar-nav'
-              onClick={() => navigate('/dashboard/profile')}>
+              className={activeTab === 'Profile' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
+              onClick={() => {
+                navigate('/dashboard/profile')
+                setActiveTab('Profile')
+                }}>
               <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary='User Profile' />
             </ListItem>

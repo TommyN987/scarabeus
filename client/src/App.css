@@ -47,6 +47,10 @@ li {
   background-color: #c0d9f1;
 }
 
+.sidebar-active-nav {
+  background-color: #c0d9f1;
+}
+
 .app-bar {
   height: 70px;
   width: calc(100vw - 250px);
