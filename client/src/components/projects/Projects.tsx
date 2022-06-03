@@ -194,15 +194,15 @@ const Projects = () => {
                           onClick={() => handleOpenDetailsModal(project.title)}
                         />
                       </Tooltip>
-                      <Tooltip title="Edit" arrow>
+                      {(userContext?.activeUser?.role === 'Project Manager' || userContext?.activeUser?.role === 'Admin') && <Tooltip title="Edit" arrow>
                         <EditIcon color="action" />
-                      </Tooltip>
-                      <Tooltip title="Delete" arrow>
+                      </Tooltip>}
+                      {userContext?.activeUser?.role === 'Admin' && <Tooltip title="Delete" arrow>
                         <DeleteIcon
                           color="action"
                           onClick={() => {handleDelete(project)}}
                         />
-                      </Tooltip>
+                      </Tooltip>}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -210,7 +210,7 @@ const Projects = () => {
             </Table>
           </TableContainer>
         </Paper>
-        <Button
+        {userContext?.activeUser?.role === 'Admin' && <Button
           variant="contained"
           startIcon={<CreateNewFolderIcon />}
           onClick={handleOpenCreationModal}
@@ -220,7 +220,7 @@ const Projects = () => {
           }}
         >
           Create New Project
-        </Button>
+        </Button>}
         <Modal open={openCreationModal} onClose={handleCloseCreationModal}>
           <Box
             sx={{

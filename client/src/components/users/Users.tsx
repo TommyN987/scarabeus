@@ -236,6 +236,7 @@ const Users = () => {
                       <TableCell>User Name</TableCell>
                       <TableCell>Email</TableCell>
                       <TableCell>Role</TableCell>
+                      <TableCell>Projects</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -244,6 +245,13 @@ const Users = () => {
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>{user.role}</TableCell>
+                        <TableCell>
+                          <ul>
+                            {user.projects.map(project => (
+                              <li key={project}>{project}</li>
+                            ))}
+                          </ul>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
