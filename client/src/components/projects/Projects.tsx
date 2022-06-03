@@ -23,6 +23,7 @@ import TableRow from '@mui/material/TableRow';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { User, Project } from '../../types/types';
@@ -45,10 +46,9 @@ const Projects = () => {
 
   const handleOpenCreationModal = () => setOpenCreationModal(true);
   const handleCloseCreationModal = () => setOpenCreationModal(false);
+
   const handlePersonnelSelectChange = (e: SelectChangeEvent<typeof newProjectPersonnel>) => {
-    const {
-      target: { value },
-    } = e;
+    const { target: { value } } = e;
     setNewProjectPersonnel(
       typeof value === 'string' ? value.split(',') : value,
     );
@@ -56,29 +56,10 @@ const Projects = () => {
 
   const handleOpenDetailsModal = async (project: string) => {
     const fetchedProject = await fetchOneProject(project);
-    setActiveProject(fetchedProject)
-    setOpenDetailsModal(true)
+    setActiveProject(fetchedProject);
+    setOpenDetailsModal(true);
   };
   const handleCloseDetailsModal = () => setOpenDetailsModal(false);
-
-  useEffect(() => {
-    fetchAllUsers()
-      .then(users => setAllUsers(users))
-      .catch(err => alert(err));
-  }, []);
-
-  useEffect(() => {
-    fetchAllProjects()
-      .then(projects => {
-        if (userContext?.activeUser?.role === 'Admin') {
-          setAllProjects(projects)
-        } else {
-          const projectsToDisplay = projects.filter(project => project.personnel.includes(userContext!.activeUser!.name));
-          setAllProjects(projectsToDisplay)
-        }
-      })
-      .catch(err => alert(err))
-  }, [trigger, userContext])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -105,13 +86,34 @@ const Projects = () => {
     } catch(error: any) {
       console.log(error.message)
     }
-    
     setNewProjectTitle('');
     setNewProjectDescription('');
     setNewProjectPersonnel([]);
     handleCloseCreationModal();
     setTrigger(trigger => !trigger)
   };
+
+  const findUserForProjectDetails = (name: string) => allUsers.find(user => user.name === name);
+  
+
+  useEffect(() => {
+    fetchAllUsers()
+      .then(users => setAllUsers(users))
+      .catch(err => alert(err));
+  }, []);
+
+  useEffect(() => {
+    fetchAllProjects()
+      .then(projects => {
+        if (userContext?.activeUser?.role === 'Admin') {
+          setAllProjects(projects)
+        } else {
+          const projectsToDisplay = projects.filter(project => project.personnel.includes(userContext!.activeUser!.name));
+          setAllProjects(projectsToDisplay)
+        }
+      })
+      .catch(err => alert(err))
+  }, [trigger, userContext]);
 
   return (
     <div className="inner-content">
@@ -165,10 +167,17 @@ const Projects = () => {
                       </ul>
                     </TableCell>
                     <TableCell className='inline-icons'>
-                      <InfoIcon 
-                        color='action'
-                        onClick={() => handleOpenDetailsModal(project.title)}
-                        /><EditIcon color='action' /><DeleteIcon color='action' />
+                      <Tooltip title='Details' arrow>
+                        <InfoIcon 
+                          color='action'
+                          onClick={() => handleOpenDetailsModal(project.title)} />
+                      </Tooltip>
+                      <Tooltip title='Edit' arrow>
+                        <EditIcon color='action' />
+                      </Tooltip>
+                      <Tooltip title='Delete' arrow>
+                        <DeleteIcon color='action' />
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -290,7 +299,7 @@ const Projects = () => {
               top: '80px',
               left: '50%',
               transform: 'translate(-50%, 0)',
-              width: '500px',
+              width: 'min(90vw, 1000px)',
               bgcolor: 'background.paper',
               border: '2px solid #000',
               boxShadow: 24,
@@ -299,12 +308,79 @@ const Projects = () => {
             >
             <Typography 
               variant="h5"
-              color='primary'
               fontWeight={600}
+              fontSize='2.5rem'
               textAlign='center'
               >
-              {activeProject?.title}
+              Project Details
             </Typography>
+            {activeProject ? 
+            <>
+              <section className='project-details-header'>
+                <Typography
+                  variant='h4'
+                  fontWeight={600}
+                  >Title: {activeProject.title}
+                </Typography>
+                <Typography
+                  variant='h5'
+                  fontWeight={600}
+                  >Description: {activeProject.description}
+                </Typography>
+              </section>
+              <section className='project-details-table'>
+                <Typography
+                  variant='h5'
+                  fontWeight={600}
+                  sx={{
+                    padding: '1rem',
+                    backgroundColor: '#e65100',
+                    color: 'white',
+                    marginBottom: '1rem'
+                  }}
+                  >Assigned Personnel
+                </Typography>
+                <TableContainer>
+                  <Table>
+                    <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                      <TableRow className='table-head'>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Role</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {activeProject.personnel.map(person => {
+                        const user = findUserForProjectDetails(person);
+                        return (
+                          <TableRow className='table-body' key={user!.email}>
+                            <TableCell>{user!.name}</TableCell>
+                            <TableCell>{user!.email}</TableCell>
+                            <TableCell>{user!.role}</TableCell>
+                            
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </section>
+              <section>
+                <Typography
+                  variant='h5'
+                  fontWeight={600}
+                  sx={{
+                    padding: '1rem',
+                    backgroundColor: '#e65100',
+                    color: 'white',
+                    marginBottom: '1rem'
+                  }}
+                  >Tickets for the Project
+                </Typography>
+              </section>
+            </>
+            : null
+            }
           </Box>
         </Modal>
       </Container>
