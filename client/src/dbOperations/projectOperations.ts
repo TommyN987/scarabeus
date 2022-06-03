@@ -19,7 +19,7 @@ export const fetchOneProject = async (title: string) => {
 }
 
 export const createProject = async (project: Project) => {
-  await fetch('http://localhost:5000/dashboard/projects', {
+  await fetch('http://localhost:5000/dashboard/projects/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -27,3 +27,13 @@ export const createProject = async (project: Project) => {
     body: JSON.stringify(project)
   });
 };
+
+export const deleteProject = async (title: string) => {
+  await fetch('http://localhost:5000/dashboard/projects', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ title: title })
+  })
+}

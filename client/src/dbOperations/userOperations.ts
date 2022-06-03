@@ -38,7 +38,17 @@ export const updateUserRole = async (name: string, role: string) => {
 };
 
 export const updateUserProjects = async (name: string, project: string) => {
-  await fetch(`http://localhost:5000/dashboard/users`, {
+  await fetch(`http://localhost:5000/dashboard/users/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: name, projects: project})
+  });
+};
+
+export const removeUserProjects = async (name: string, project: string) => {
+  await fetch(`http://localhost:5000/dashboard/users/remove`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

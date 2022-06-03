@@ -40,7 +40,7 @@ export const updateUserRole = async (req, res) => {
   };
 };
 
-export const updateUserProjects = async (req, res) => {
+export const addUserProjects = async (req, res) => {
   try {
     const user = await User.findOne({ name: req.body.name });
     user.projects = [...user.projects, req.body.projects];
@@ -50,6 +50,18 @@ export const updateUserProjects = async (req, res) => {
     res.status(404).json({ message: err.message })
   }
 };
+
+export const removeUserProjects = async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.body.name });
+    const { projects } = user;
+    projects.splice(projects[projects.indexOf(req.body.projects)], 1);
+    user.save();
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
 
 export const deleteUser = async (req, res) => {
   try {

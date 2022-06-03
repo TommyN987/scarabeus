@@ -6,8 +6,8 @@ export const getAllProjects = async (req, res) => {
     res.status(200).json(projects);
   } catch (err) {
     res.status(404).json({ message: err.message })
-  }
-}
+  };
+};
 
 export const getOneProject = async (req, res) => {
   try {
@@ -15,8 +15,8 @@ export const getOneProject = async (req, res) => {
     res.status(200).json(project);
   } catch (err) {
     res.status(404).json({ message: err.message })
-  }
-}
+  };
+};
 
 export const createProject = async (req, res) => {
   const project = req.body;
@@ -28,5 +28,14 @@ export const createProject = async (req, res) => {
     res.status(201).json(newProject);
   } catch (err) {
     res.status(409).json({ message: err.message })
+  };
+};
+
+export const deleteProject = async (req, res) => {
+  try {
+    const project = await Project.deleteOne({ title: req.body.title });
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
   }
 }

@@ -27,8 +27,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { User, Project } from '../../types/types';
-import { fetchAllUsers, updateUserProjects } from '../../dbOperations/userOperations';
-import { createProject, fetchAllProjects, fetchOneProject } from '../../dbOperations/projectOperations';
+import { fetchAllUsers, updateUserProjects, removeUserProjects } from '../../dbOperations/userOperations';
+import { createProject, fetchAllProjects, fetchOneProject, deleteProject } from '../../dbOperations/projectOperations';
 
 const Projects = () => {
 
@@ -176,7 +176,16 @@ const Projects = () => {
                         <EditIcon color='action' />
                       </Tooltip>
                       <Tooltip title='Delete' arrow>
-                        <DeleteIcon color='action' />
+                        <DeleteIcon 
+                          color='action'
+                          onClick={() => {
+                            deleteProject(project.title);
+                            project.personnel.forEach(user => {
+                              removeUserProjects(user, project.title).then(res => console.log(res))
+                            });
+                            setTrigger(trigger => !trigger)
+                          }}
+                          />
                       </Tooltip>
                     </TableCell>
                   </TableRow>
