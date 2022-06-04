@@ -55,7 +55,7 @@ export const removeUserProjects = async (req, res) => {
   try {
     const user = await User.findOne({ name: req.body.name });
     const { projects } = user;
-    projects.splice(projects[projects.indexOf(req.body.projects)], 1);
+    projects.splice(projects.indexOf(req.body.projects), 1);
     user.save();
     res.status(200).json(user);
   } catch (err) {

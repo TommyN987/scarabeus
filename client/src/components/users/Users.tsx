@@ -75,8 +75,8 @@ const Users = () => {
     const userToDelete = allUsers.find(user => user.email === selectedUserToDelete);
 
     // DELETION OF USER FROM HIS PROJECTS 
-    userToDelete?.projects.forEach(project => {
-      updateProjectPersonnel(project, userToDelete.name)
+    userToDelete?.projects.forEach(async (project) => {
+      await updateProjectPersonnel(project, userToDelete.name)
     });
 
     // DELETION FROM FIREBASE
