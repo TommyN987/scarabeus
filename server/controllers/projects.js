@@ -1,4 +1,5 @@
 import Project from "../models/project.js";
+import User from "../models/user.js";
 
 export const getAllProjects = async (req, res) => {
   try {
@@ -30,6 +31,18 @@ export const createProject = async (req, res) => {
     res.status(409).json({ message: err.message })
   };
 };
+
+export const removePersonnelFromProject = async (req, res) => {
+  try {
+    const project = await Project.findOne({ title: req.body.title });
+    const { personnel } = project;
+    personnel.splice(personnel[personnel.indexOf(req.body.user)], 1);
+    project.save();
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
 
 export const deleteProject = async (req, res) => {
   try {

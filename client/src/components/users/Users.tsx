@@ -21,6 +21,7 @@ import TableRow from '@mui/material/TableRow';
 import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
 import { fetchAllUsers, updateUserRole, deleteUser } from "../../dbOperations/userOperations";
+import { updateProjectPersonnel } from '../../dbOperations/projectOperations'
 
 const Users = () => {
 
@@ -65,15 +66,20 @@ const Users = () => {
     setTrigger(trigger => !trigger);
   };
 
-  const handleDelete = (e: FormEvent) => {
+  const handleDelete = async (e: FormEvent) => {
     e.preventDefault()
     
     // DELETION FROM DB
-    deleteUser(selectedUserToDelete);
+    await deleteUser(selectedUserToDelete);
 
-    // DELETION FROM FIREBASE
     const userToDelete = allUsers.find(user => user.email === selectedUserToDelete);
 
+    // DELETION OF USER FROM HIS PROJECTS 
+    userToDelete?.projects.forEach(project => {
+      updateProjectPersonnel(project, userToDelete.name)
+    });
+
+    // DELETION FROM FIREBASE
     if (userContext && userContext.activeUser && userToDelete) {
       deleteUserFromFirebase(userContext?.activeUser?.email, userContext?.activeUser?.password, userToDelete?.email, userToDelete?.password)
     }
