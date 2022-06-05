@@ -3,6 +3,6 @@ import { createTicket } from "../controllers/tickets.js";
 
 const router = express.Router();
 
-router.post('/', createTicket)
+router.patch('/', createTicket)
 
 export default router;

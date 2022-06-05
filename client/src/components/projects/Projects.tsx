@@ -144,7 +144,7 @@ const Projects = () => {
           flexDirection: 'column',
           gap: '1.5rem',
         }}
-      >
+        >
         <Paper
           elevation={10}
           sx={{
