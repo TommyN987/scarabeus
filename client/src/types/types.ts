@@ -33,5 +33,5 @@ export type Project = {
   title: string,
   description: string,
   personnel: string[],
-  tickets: {}[]
+  tickets: any[]
 }

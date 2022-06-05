@@ -38,13 +38,12 @@ const Tickets = () => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(userContext?.activeUser)
+
     try {
       if (userContext && userContext.activeUser) {
-        addTicket(activeProject!.title, ticketTitle, ticketDescription, ticketPriority, userContext?.activeUser.name)
-          .then(res => console.log(res))
+        await addTicket(activeProject!.title, ticketTitle, ticketDescription, ticketPriority, userContext?.activeUser.name)
       }
     } catch (err: any) {
       console.log(err.message);
@@ -62,7 +61,6 @@ const Tickets = () => {
       .then((projects) => {
         if (userContext?.activeUser?.role === 'Admin') {
           setAllProjects(projects);
-          console.log(projects)
         } else {
           const projectsToDisplay = projects.filter((project) =>
             project.personnel.includes(userContext!.activeUser!.name)
@@ -105,7 +103,7 @@ const Tickets = () => {
                   padding: '1rem',
                   backgroundColor: '#e65100',
                   color: 'white',
-                  margin: '3rem 0 1rem',
+                  marginTop: '3rem',
                   display: 'flex',
                   justifyContent: 'space-between'
                 }}>{project.title} 
@@ -121,10 +119,32 @@ const Tickets = () => {
               </Typography>
               <TableContainer
                 sx={{
-                  marginTop: '2rem',
                   overflow: 'auto',
                 }}>
-
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#1976d2'}}>
+                    <TableRow className="table-head">
+                      <TableCell>Title</TableCell>
+                      <TableCell>Submitter</TableCell>
+                      <TableCell>Solver</TableCell>
+                      <TableCell>Priority</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {project.tickets.map(ticket => (
+                      <TableRow className="table-body" key={ticket._id}>
+                        <TableCell>{ticket.title}</TableCell>
+                        <TableCell>{ticket.submitter}</TableCell>
+                        <TableCell>{ticket.solver}</TableCell>
+                        <TableCell>{ticket.priority}</TableCell>
+                        <TableCell>{ticket.status}</TableCell>
+                        <TableCell>D | E | D</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </TableContainer>
             </>
           ))}    
