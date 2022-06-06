@@ -1,8 +1,9 @@
 import express from "express";
-import { createTicket } from "../controllers/tickets.js";
+import { createTicket, updateTicket } from "../controllers/tickets.js";
 
 const router = express.Router();
 
-router.patch('/', createTicket)
+router.patch('/', createTicket);
+router.patch('/update', updateTicket);
 
 export default router;

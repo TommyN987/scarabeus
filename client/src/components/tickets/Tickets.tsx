@@ -23,7 +23,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { fetchAllProjects, addTicket } from "../../dbOperations/projectOperations";
+import { fetchAllProjects } from "../../dbOperations/projectOperations";
+import { addTicket } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
@@ -38,6 +39,7 @@ const Tickets = () => {
   // STATE FOR MODALS
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDetailsModal, setOpenDetailsModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   // STATE FOR ADDING A TICKET
   const [ticketTitle, setTicketTitle] = useState('');
@@ -73,13 +75,11 @@ const Tickets = () => {
     fetchAllProjects()
       .then((projects) => {
         if (userContext?.activeUser?.role === 'Admin') {
-          console.log(projects);
           setAllProjects(projects);
         } else {
           const projectsToDisplay = projects.filter((project) =>
             project.personnel.includes(userContext!.activeUser!.name)
           );
-          console.log(projectsToDisplay);
           setAllProjects(projectsToDisplay);
         }
       })

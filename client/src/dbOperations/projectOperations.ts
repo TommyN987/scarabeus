@@ -37,24 +37,6 @@ export const updateProjectPersonnel = async (title: string, user: string) => {
   });
 };
 
-export const addTicket = async (project: string, title: string, description: string, priority: string, submitter: string) => {
-  await fetch('http://localhost:5000/dashboard/tickets', {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      title: project,
-      ticket: {
-        title: title,
-        description: description,
-        priority: priority,
-        submitter: submitter
-      }
-    })
-  });
-};
-
 export const deleteProject = async (title: string) => {
   await fetch('http://localhost:5000/dashboard/projects', {
     method: 'DELETE',

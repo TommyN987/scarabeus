@@ -11,4 +11,21 @@ export const createTicket = async (req, res) => {
   } catch (err) {
     res.status(404).json({ message: err.message })
   }
+};
+
+export const updateTicket = async (req, res) => {
+  const updatesInTicket = req.body.ticket;
+
+  try {
+    const project = await Project.findOne({ title: req.body.title });
+    const { tickets } = project;
+    const index = tickets.findIndex(({ title }) => title == updatesInTicket.title);
+    tickets[index].solver = updatesInTicket.solver;
+    tickets[index].priority = updatesInTicket.priority;
+    tickets[index].status = updatesInTicket.status;
+    project.save();
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
 }
