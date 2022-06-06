@@ -21,10 +21,11 @@ import TableRow from '@mui/material/TableRow';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects } from "../../dbOperations/projectOperations";
-import { addTicket } from '../../dbOperations/ticketOperations';
+import { addTicket, updateTicket } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
@@ -46,12 +47,23 @@ const Tickets = () => {
   const [ticketDescription, setTicketDescription] = useState('');
   const [ticketPriority, setTicketPriority] = useState('');
 
+  // STATE FOR EDITING A TICKET
+  const [editedTicketSolver, setEditedTicketSolver] = useState('');
+  const [editedTicketPriority, setEditedTicketPriority] = useState('');
+  const [editedTicketStatus, setEditedTicketStatus] = useState('');
+
+  const [trigger, setTrigger] = useState(false);
+
+
   const userContext = useContext(AuthContext);
 
   const handleOpenCreateModal = () => setOpenCreateModal(true);
   const handleCloseCreateModal = () => setOpenCreateModal(false);
   const handleOpenDetailsModal = () => setOpenDetailsModal(true);
   const handleCloseDetailsModal = () => setOpenDetailsModal(false);
+  const handleOpenEditModal = () => setOpenEditModal(true);
+  const handleCloseEditModal = () => setOpenEditModal(false);
+  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -69,6 +81,22 @@ const Tickets = () => {
     setTicketDescription('');
     setTicketPriority('');
     setOpenCreateModal(false);
+  };
+
+  const handleEdit = async (project: string, title: string, priority: string, status: string, solver: string) => {
+    
+    try {
+      const newTicket = await updateTicket(project, title, priority, status, solver);
+      console.log(newTicket)
+      setTrigger(trigger => !trigger);
+      setOpenEditModal(false);
+      setEditedTicketPriority('');
+      setEditedTicketSolver('');
+      setEditedTicketStatus('');
+      setActiveProject(null);
+    } catch (err: any) {
+      console.log(err.message)
+    }
   }
 
   useEffect(() => {
@@ -84,7 +112,7 @@ const Tickets = () => {
         }
       })
       .catch((err) => alert(err));
-  }, [userContext])
+  }, [userContext, trigger])
 
   return (
     <div className="inner-content">
@@ -169,6 +197,11 @@ const Tickets = () => {
                           <Tooltip title='Edit' arrow>
                             <EditIcon
                               color='action'
+                              onClick={() => {
+                                setActiveProject(project);
+                                setActiveTicket(ticket);
+                                handleOpenEditModal();
+                              }}
                               />
                           </Tooltip>
                           }
@@ -260,6 +293,156 @@ const Tickets = () => {
               Add ticket
             </Button>
           </form>
+        </Box>
+      </Modal>
+      <Modal
+        open={openEditModal}
+        onClose={handleCloseEditModal}
+        >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '80px',
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            width: 'min(90vw, 1000px)',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography
+            variant="h5"
+            fontWeight={600}
+            fontSize="2.5rem"
+            textAlign="center"
+          >
+            Edit Ticket
+          </Typography>
+          {activeTicket ? 
+          <>
+            <section className="project-details-header">
+              <Typography variant="h4" fontWeight={600}>
+                Title: {activeTicket.title}
+              </Typography>
+              <Typography variant="h5" fontWeight={600}>
+                Description: {activeTicket.description}
+              </Typography>
+            </section>
+            <section className='project-details-table'>
+              <Typography
+                variant="h5"
+                fontWeight={600}
+                sx={{
+                  padding: '1rem',
+                  backgroundColor: '#e65100',
+                  color: 'white',
+                  marginBottom: '1rem',
+                }}>
+                Details
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                    <TableRow className="table-head">
+                      <TableCell>Submitter</TableCell>
+                      <TableCell>Solver</TableCell>
+                      <TableCell>Priority</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Created</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow className="table-body">
+                      <TableCell>{activeTicket.submitter}</TableCell>
+                      <TableCell>
+                        <Select
+                          labelId="solver-select-label"
+                          id="solver-select"
+                          value={editedTicketSolver}
+                          label="Pick"
+                          color="primary"
+                          sx={{
+                            width: '100%',
+                          }}
+                          onChange={(e) => setEditedTicketSolver(e.target.value)}
+                          >
+                          {activeProject?.personnel.map((user) => (
+                            <MenuItem key={user} value={user}>
+                            {user}
+                            </MenuItem>
+                          )) }
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          labelId="[priority-select-label"
+                          id="[priority-select"
+                          value={editedTicketPriority}
+                          label="Pick"
+                          color="primary"
+                          sx={{
+                            width: '100%',
+                          }}
+                          onChange={(e) => setEditedTicketPriority(e.target.value)}
+                          >
+                          <MenuItem value='Low'>Low</MenuItem>
+                          <MenuItem value='Medium'>Medium</MenuItem>
+                          <MenuItem value='High'>High</MenuItem>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                      <Select
+                          labelId="[status-select-label"
+                          id="[status-select"
+                          value={editedTicketStatus}
+                          label="Pick"
+                          color="primary"
+                          sx={{
+                            width: '100%',
+                          }}
+                          onChange={(e) => setEditedTicketStatus(e.target.value)}
+                          >
+                          <MenuItem value='Open'>Open</MenuItem>
+                          <MenuItem value='In Process'>In Process</MenuItem>
+                          <MenuItem value='Closed'>Closed</MenuItem>
+                        </Select>
+                      </TableCell>
+                      <TableCell>{activeTicket.created.toString()}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </section>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<CreditScoreIcon />}
+              sx={{
+                margin: '0 45% 2rem'
+              }}
+              onClick={() => {
+                handleEdit(activeProject!.title, activeTicket.title, editedTicketPriority, editedTicketStatus, editedTicketSolver)
+              }}
+              >
+              Edit
+            </Button>
+            <section className='project-details-table'>
+              <Typography
+                variant="h5"
+                fontWeight={600}
+                sx={{
+                  padding: '1rem',
+                  backgroundColor: '#e65100',
+                  color: 'white',
+                  marginBottom: '1rem',
+                }}>
+                Comments
+              </Typography>
+            </section>
+          </> 
+          : null}
         </Box>
       </Modal>
       <Modal
