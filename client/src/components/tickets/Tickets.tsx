@@ -211,6 +211,9 @@ const Tickets = () => {
                               onClick={() => {
                                 setActiveProject(project);
                                 setActiveTicket(ticket);
+                                setEditedTicketSolver(ticket.solver);
+                                setEditedTicketPriority(ticket.priority);
+                                setEditedTicketStatus(ticket.status)
                                 handleOpenEditModal();
                               }}
                               />
