@@ -139,7 +139,7 @@ const Tickets = () => {
             <>
               <Typography
                 variant="h5"
-                fontWeight={600}
+                fontWeight={800}
                 sx={{
                   width: '100%',
                   padding: '1rem',
@@ -147,12 +147,18 @@ const Tickets = () => {
                   color: 'white',
                   marginTop: '3rem',
                   display: 'flex',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}>{project.title} 
                 <Button
                   variant="outlined"
                   color='inherit'
                   startIcon={<NoteAddIcon />}
+                  sx={{
+                    border: '3px solid white',
+                    fontSize: '1.1rem',
+                    fontWeight: '800'
+                  }}
                   onClick={() => {
                     handleOpenCreateModal();
                     setActiveProject(project);
