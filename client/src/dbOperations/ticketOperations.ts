@@ -33,3 +33,22 @@ export const updateTicket = async (project: string, title: string, priority: str
     })
   });
 };
+
+export const addComment = async (project: string, title: string, commenter: string, message: string) => {
+  await fetch('http://localhost:5000/dashboard/tickets/comment', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: project,
+      ticket: {
+        title: title,
+        comment: {
+          commenter: commenter,
+          message: message
+        }
+      }
+    })
+  })
+}

@@ -22,10 +22,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import TextField from '@mui/material/TextField';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects } from "../../dbOperations/projectOperations";
-import { addTicket, updateTicket } from '../../dbOperations/ticketOperations';
+import { addTicket, updateTicket, addComment } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
@@ -63,6 +65,9 @@ const Tickets = () => {
   const [editedTicketPriority, setEditedTicketPriority] = useState('');
   const [editedTicketStatus, setEditedTicketStatus] = useState('');
 
+  // STATE FOR ADDING COMMENT
+  const [comment, setComment] = useState('');
+
   // STATE FOR TRIGGERING FETCHALLPROJECTS
   const [trigger, setTrigger] = useState(false);
 
@@ -98,6 +103,21 @@ const Tickets = () => {
     } catch (err: any) {
       console.log(err.message)
     }
+  }
+
+  const handleAddComment = async (project: string, title: string, message: string) => {
+    try {
+      if (userContext && userContext.activeUser) {
+        await addComment(project, title, userContext.activeUser.name, message)
+      }
+    } catch (err: any) {
+      console.log(err.message)
+    }
+    setOpenDetailsModal(false);
+    setComment('');
+    setTrigger(trigger => !trigger);
+    setActiveProject(null);
+    setActiveTicket(null);
   }
 
   useEffect(() => {
@@ -382,7 +402,6 @@ const Tickets = () => {
                           id="solver-select"
                           value={editedTicketSolver}
                           label="Pick"
-                          color="primary"
                           sx={{
                             width: '100%',
                           }}
@@ -560,6 +579,37 @@ const Tickets = () => {
             </section>
           </> 
           : null}
+          <div
+            className="comment-form"
+            >
+            <Typography
+              variant="h5"
+              fontWeight={600}
+              textAlign="center"
+              sx={{
+                marginBottom: '1rem'
+              }}
+              >
+              Add Comment
+            </Typography>
+            <TextField
+              multiline
+              fullWidth
+              placeholder="Enter comment..."
+              minRows={4}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}/>
+            <Button
+              type="submit"
+              variant='contained'
+              startIcon={<AddCommentIcon />}
+              onClick={() => {
+                handleAddComment(activeProject!.title, activeTicket!.title, comment);
+              }}
+              >
+              Add Comment
+            </Button>
+          </div>
         </Box>
       </Modal>
     </div>

@@ -122,3 +122,10 @@ li {
 .project-details-table {
   margin-bottom: 2rem;
 }
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
