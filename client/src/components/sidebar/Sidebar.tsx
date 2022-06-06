@@ -123,7 +123,7 @@ const Sidebar = () => {
                 setActiveTab('Projects');
                 }}>
               <ListItemIcon><TopicIcon /></ListItemIcon>
-              <ListItemText primary='My Projects' />
+              <ListItemText primary='Projects' />
             </ListItem>
             <ListItem 
               className={activeTab === 'Tickets' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
@@ -132,7 +132,7 @@ const Sidebar = () => {
                 setActiveTab('Tickets');
                 }}>
               <ListItemIcon><AssignmentIcon /></ListItemIcon>
-              <ListItemText primary='My Tickets' />
+              <ListItemText primary='Tickets' />
             </ListItem>
             <ListItem 
               className={activeTab === 'Profile' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}

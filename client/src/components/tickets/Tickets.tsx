@@ -133,7 +133,7 @@ const Tickets = () => {
             minWidth: '830px',
           }}>
           <Typography variant="h4" fontWeight={600}>
-            My Tickets
+            Tickets
           </Typography>
           {allProjects.map(project => (
             <>
@@ -145,7 +145,7 @@ const Tickets = () => {
                   padding: '1rem',
                   backgroundColor: '#e65100',
                   color: 'white',
-                  marginTop: '3rem',
+                  margin: '3rem 0 .4rem',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -199,7 +199,10 @@ const Tickets = () => {
                               }}
                               />
                           </Tooltip>
-                          {userContext?.activeUser?.role !== 'Submitter' &&
+                          {userContext?.activeUser?.role === 'Admin' 
+                          || userContext?.activeUser?.role === 'Project Manager'
+                          || (userContext?.activeUser?.role === 'Developer' && userContext?.activeUser?.name === ticket.solver)
+                          ?
                           <Tooltip title='Edit' arrow>
                             <EditIcon
                               color='action'
@@ -210,6 +213,8 @@ const Tickets = () => {
                               }}
                               />
                           </Tooltip>
+                          :
+                          null
                           }
                         </TableCell>
                       </TableRow>
@@ -347,7 +352,7 @@ const Tickets = () => {
                   padding: '1rem',
                   backgroundColor: '#e65100',
                   color: 'white',
-                  marginBottom: '1rem',
+                  marginBottom: '.4rem',
                 }}>
                 Details
               </Typography>
@@ -366,6 +371,7 @@ const Tickets = () => {
                     <TableRow className="table-body">
                       <TableCell>{activeTicket.submitter}</TableCell>
                       <TableCell>
+                        {userContext?.activeUser?.role === 'Admin' || userContext?.activeUser?.role === 'Project Manager' ? 
                         <Select
                           labelId="solver-select-label"
                           id="solver-select"
@@ -383,8 +389,12 @@ const Tickets = () => {
                             </MenuItem>
                           )) }
                         </Select>
+                        :
+                        activeTicket.solver
+                        }
                       </TableCell>
                       <TableCell>
+                        {userContext?.activeUser?.role === 'Admin' || userContext?.activeUser?.role === 'Project Manager' ?
                         <Select
                           labelId="[priority-select-label"
                           id="[priority-select"
@@ -400,6 +410,9 @@ const Tickets = () => {
                           <MenuItem value='Medium'>Medium</MenuItem>
                           <MenuItem value='High'>High</MenuItem>
                         </Select>
+                        :
+                        activeTicket.priority
+                        }
                       </TableCell>
                       <TableCell>
                       <Select
@@ -500,7 +513,7 @@ const Tickets = () => {
                   padding: '1rem',
                   backgroundColor: '#e65100',
                   color: 'white',
-                  marginBottom: '1rem',
+                  marginBottom: '.4rem',
                 }}>
                 Details
               </Typography>

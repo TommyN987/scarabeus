@@ -156,7 +156,7 @@ const Projects = () => {
           }}
         >
           <Typography variant="h4" fontWeight={600}>
-            My Projects
+            Projects
           </Typography>
           <TableContainer
             sx={{
