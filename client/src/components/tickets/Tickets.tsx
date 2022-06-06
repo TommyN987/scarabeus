@@ -18,6 +18,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects, addTicket } from "../../dbOperations/projectOperations";
@@ -140,7 +143,20 @@ const Tickets = () => {
                         <TableCell>{ticket.solver}</TableCell>
                         <TableCell>{ticket.priority}</TableCell>
                         <TableCell>{ticket.status}</TableCell>
-                        <TableCell>D | E | D</TableCell>
+                        <TableCell className="inline-icons">
+                          <Tooltip title='details' arrow>
+                            <InfoIcon
+                              color='action'
+                              />
+                          </Tooltip>
+                          {userContext?.activeUser?.role !== 'Submitter' &&
+                          <Tooltip title='Edit' arrow>
+                            <EditIcon
+                              color='action'
+                              />
+                          </Tooltip>
+                          }
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
