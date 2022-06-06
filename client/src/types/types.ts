@@ -35,3 +35,15 @@ export type Project = {
   personnel: string[],
   tickets: any[]
 }
+
+export type Ticket = {
+  title: string,
+  description: string,
+  submitter: string,
+  solver: string,
+  status: string,
+  priority: string,
+  created: Date,
+  _id: string,
+  comments: any[]
+}

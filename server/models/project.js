@@ -18,6 +18,10 @@ const projectSchema = new mongoose.Schema({
         type: String,
         default: 'Open'
       },
+      created: {
+        type: Date,
+        default: Date.now
+        },
       comments: {
         type: [{
         commenter: String,

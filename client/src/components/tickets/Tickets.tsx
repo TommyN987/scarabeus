@@ -24,22 +24,32 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects, addTicket } from "../../dbOperations/projectOperations";
-import { Project } from "../../types/types";
+import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
 
+  // STATE FOR PROJECTS
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [openModal, setOpenModal] = useState(false);
 
+  // STATE FOR ACTIVE TICKET
+  const [activeTicket, setActiveTicket] = useState<Ticket | null>(null)
+
+  // STATE FOR MODALS
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
+
+  // STATE FOR ADDING A TICKET
   const [ticketTitle, setTicketTitle] = useState('');
   const [ticketDescription, setTicketDescription] = useState('');
   const [ticketPriority, setTicketPriority] = useState('');
 
   const userContext = useContext(AuthContext);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenCreateModal = () => setOpenCreateModal(true);
+  const handleCloseCreateModal = () => setOpenCreateModal(false);
+  const handleOpenDetailsModal = () => setOpenDetailsModal(true);
+  const handleCloseDetailsModal = () => setOpenDetailsModal(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -56,13 +66,14 @@ const Tickets = () => {
     setTicketTitle('');
     setTicketDescription('');
     setTicketPriority('');
-    setOpenModal(false);
+    setOpenCreateModal(false);
   }
 
   useEffect(() => {
     fetchAllProjects()
       .then((projects) => {
         if (userContext?.activeUser?.role === 'Admin') {
+          console.log(projects);
           setAllProjects(projects);
         } else {
           const projectsToDisplay = projects.filter((project) =>
@@ -115,7 +126,7 @@ const Tickets = () => {
                   color='inherit'
                   startIcon={<NoteAddIcon />}
                   onClick={() => {
-                    handleOpenModal();
+                    handleOpenCreateModal();
                     setActiveProject(project);
                   }}>Add ticket
                 </Button>
@@ -147,6 +158,11 @@ const Tickets = () => {
                           <Tooltip title='details' arrow>
                             <InfoIcon
                               color='action'
+                              onClick={() => {
+                                setActiveProject(project);
+                                setActiveTicket(ticket);
+                                handleOpenDetailsModal();
+                              }}
                               />
                           </Tooltip>
                           {userContext?.activeUser?.role !== 'Submitter' &&
@@ -167,9 +183,9 @@ const Tickets = () => {
         </Paper>
       </Container>
       <Modal
-        open={openModal}
+        open={openCreateModal}
         onClose={() => {
-          handleCloseModal();
+          handleCloseCreateModal();
           setActiveProject(null);
         }}>
         <Box
@@ -244,6 +260,93 @@ const Tickets = () => {
               Add ticket
             </Button>
           </form>
+        </Box>
+      </Modal>
+      <Modal
+        open={openDetailsModal}
+        onClose={handleCloseDetailsModal}
+        >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '80px',
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            width: 'min(90vw, 1000px)',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography
+            variant="h5"
+            fontWeight={600}
+            fontSize="2.5rem"
+            textAlign="center"
+          >
+            Ticket Details
+          </Typography>
+          {activeTicket ? 
+          <>
+            <section className="project-details-header">
+              <Typography variant="h4" fontWeight={600}>
+                Title: {activeTicket.title}
+              </Typography>
+              <Typography variant="h5" fontWeight={600}>
+                Description: {activeTicket.description}
+              </Typography>
+            </section>
+            <section className='project-details-table'>
+              <Typography
+                variant="h5"
+                fontWeight={600}
+                sx={{
+                  padding: '1rem',
+                  backgroundColor: '#e65100',
+                  color: 'white',
+                  marginBottom: '1rem',
+                }}>
+                Details
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                    <TableRow className="table-head">
+                      <TableCell>Submitter</TableCell>
+                      <TableCell>Solver</TableCell>
+                      <TableCell>Priority</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Created</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow className="table-body">
+                      <TableCell>{activeTicket.submitter}</TableCell>
+                      <TableCell>{activeTicket.solver}</TableCell>
+                      <TableCell>{activeTicket.priority}</TableCell>
+                      <TableCell>{activeTicket.status}</TableCell>
+                      <TableCell>{activeTicket.created.toString()}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </section>
+            <section className='project-details-table'>
+              <Typography
+                variant="h5"
+                fontWeight={600}
+                sx={{
+                  padding: '1rem',
+                  backgroundColor: '#e65100',
+                  color: 'white',
+                  marginBottom: '1rem',
+                }}>
+                Comments
+              </Typography>
+            </section>
+          </> 
+          : null}
         </Box>
       </Modal>
     </div>
