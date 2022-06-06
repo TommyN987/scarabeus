@@ -40,38 +40,46 @@ import {
 } from '../../dbOperations/projectOperations';
 
 const Projects = () => {
-  const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [allProjects, setAllProjects] = useState<Project[]>([]);
-  const [openCreationModal, setOpenCreationModal] = useState(false);
-  const [openDetailsModal, setOpenDetailsModal] = useState(false);
-  const [newProjectTitle, setNewProjectTitle] = useState('');
-  const [newProjectDescription, setNewProjectDescription] = useState('');
-  const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [trigger, setTrigger] = useState(false);
-
+  
+  // ACTIVE USER
   const userContext = useContext(AuthContext);
 
+  // STATE FOR ALL AVAILABLE USERS AND PROJECTS
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
+
+  // STATE FOR ACTIVE PROJECT
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+
+  // STATE AND HANDLERS FOR MODALS
+  const [openCreationModal, setOpenCreationModal] = useState(false);
   const handleOpenCreationModal = () => setOpenCreationModal(true);
   const handleCloseCreationModal = () => setOpenCreationModal(false);
 
-  const handlePersonnelSelectChange = (
-    e: SelectChangeEvent<typeof newProjectPersonnel>
-  ) => {
-    const {
-      target: { value },
-    } = e;
-    setNewProjectPersonnel(
-      typeof value === 'string' ? value.split(',') : value
-    );
-  };
-
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const handleOpenDetailsModal = async (project: string) => {
     const fetchedProject = await fetchOneProject(project);
     setActiveProject(fetchedProject);
     setOpenDetailsModal(true);
   };
   const handleCloseDetailsModal = () => setOpenDetailsModal(false);
+
+  // STATE FOR NEW PROJECT DATA
+  const [newProjectTitle, setNewProjectTitle] = useState('');
+  const [newProjectDescription, setNewProjectDescription] = useState('');
+  const [newProjectPersonnel, setNewProjectPersonnel] = useState<string[]>([]);
+
+  // STATE FOR TRIGGERING FETCHALLPROJECTS
+  const [trigger, setTrigger] = useState(false);
+
+
+
+  const handlePersonnelSelectChange = (e: SelectChangeEvent<typeof newProjectPersonnel>) => {
+    const { target: { value } } = e;
+    setNewProjectPersonnel(
+      typeof value === 'string' ? value.split(',') : value
+    );
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -154,8 +162,8 @@ const Projects = () => {
             padding: '1.5rem',
             minWidth: '830px',
           }}
-        >
-          <Typography variant="h4" fontWeight={600}>
+          >
+          <Typography variant="h3" fontWeight={600}>
             Projects
           </Typography>
           <TableContainer
@@ -163,7 +171,7 @@ const Projects = () => {
               marginTop: '2rem',
               overflow: 'auto',
             }}
-          >
+            >
             <Table>
               <TableHead sx={{ backgroundColor: '#1976d2' }}>
                 <TableRow className="table-head">
@@ -209,226 +217,224 @@ const Projects = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {userContext?.activeUser?.role === 'Admin' && 
+          <Button
+            variant="contained"
+            startIcon={<CreateNewFolderIcon />}
+            onClick={handleOpenCreationModal}
+            sx={{
+              width: '30%',
+              alignSelf: 'center',
+              marginTop: '1rem'
+            }}>
+            Create New Project
+          </Button>}
         </Paper>
-        {userContext?.activeUser?.role === 'Admin' && <Button
-          variant="contained"
-          startIcon={<CreateNewFolderIcon />}
-          onClick={handleOpenCreationModal}
+      </Container>
+      <Modal open={openCreationModal} onClose={handleCloseCreationModal}>
+        <Box
           sx={{
-            width: '30%',
-            alignSelf: 'center',
+            position: 'absolute',
+            top: '80px',
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            width: '500px',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
           }}
         >
-          Create New Project
-        </Button>}
-        <Modal open={openCreationModal} onClose={handleCloseCreationModal}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '80px',
-              left: '50%',
-              transform: 'translate(-50%, 0)',
-              width: '500px',
-              bgcolor: 'background.paper',
-              border: '2px solid #000',
-              boxShadow: 24,
-              p: 4,
-            }}
+          <Typography
+            variant="h5"
+            color="primary"
+            fontWeight={600}
+            textAlign="center"
           >
-            <Typography
-              variant="h5"
-              color="primary"
-              fontWeight={600}
-              textAlign="center"
-            >
-              Create New Project
-            </Typography>
-            <form className="new-project-form" onSubmit={handleSubmit}>
-              <FormControl>
-                <InputLabel htmlFor="title">Title</InputLabel>
-                <Input
-                  required
-                  type="text"
-                  name="title"
-                  id="title"
-                  value={newProjectTitle}
-                  onChange={(e) => setNewProjectTitle(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <InputLabel htmlFor="description">Description</InputLabel>
-                <Input
-                  required
-                  type="text"
-                  name="description"
-                  id="description"
-                  value={newProjectDescription}
-                  onChange={(e) => setNewProjectDescription(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <InputLabel id="personnel-select-label">
-                  Select personnel
-                </InputLabel>
-                <Select
-                  labelId="personnel-select-label"
-                  id="personnel-select"
-                  multiple
-                  required
-                  value={newProjectPersonnel}
-                  onChange={handlePersonnelSelectChange}
-                  input={<OutlinedInput label="Select personnel" />}
-                  renderValue={(selected): React.ReactNode => {
-                    return (
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 0.5,
-                        }}
-                      >
-                        {selected.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    );
-                  }}
-                >
-                  {allUsers.map((user) => (
-                    <MenuItem className='new-project-personnel' key={user.name} value={user.name}>
-                      <span>{user.name}</span><span>{user.role}</span>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  marginTop: '1rem',
-                  fontSize: '1.2rem',
+            Create New Project
+          </Typography>
+          <form className="new-project-form" onSubmit={handleSubmit}>
+            <FormControl>
+              <InputLabel htmlFor="title">Title</InputLabel>
+              <Input
+                required
+                type="text"
+                name="title"
+                id="title"
+                value={newProjectTitle}
+                onChange={(e) => setNewProjectTitle(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel htmlFor="description">Description</InputLabel>
+              <Input
+                required
+                type="text"
+                name="description"
+                id="description"
+                value={newProjectDescription}
+                onChange={(e) => setNewProjectDescription(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel id="personnel-select-label">
+                Select personnel
+              </InputLabel>
+              <Select
+                labelId="personnel-select-label"
+                id="personnel-select"
+                multiple
+                required
+                value={newProjectPersonnel}
+                onChange={handlePersonnelSelectChange}
+                input={<OutlinedInput label="Select personnel" />}
+                renderValue={(selected): React.ReactNode => {
+                  return (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 0.5,
+                      }}
+                    >
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  );
                 }}
               >
-                Create
-              </Button>
-            </form>
-          </Box>
-        </Modal>
-        <Modal 
-          open={openDetailsModal} 
-          onClose={handleCloseDetailsModal}
-          sx={{
-            overflow: 'auto'
-          }}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '0',
-              left: '50%',
-              transform: 'translate(-50%, 0)',
-              width: 'min(90vw, 1000px)',
-              bgcolor: 'background.paper',
-              border: '2px solid #000',
-              boxShadow: 24,
-              p: 4,
-            }}
-          >
-            <Typography
-              variant="h5"
-              fontWeight={600}
-              fontSize="2.5rem"
-              textAlign="center"
+                {allUsers.map((user) => (
+                  <MenuItem className='new-project-personnel' key={user.name} value={user.name}>
+                    <span>{user.name}</span><span>{user.role}</span>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                marginTop: '1rem',
+                fontSize: '1.2rem',
+              }}
             >
-              Project Details
-            </Typography>
-            {activeProject ? (
-              <>
-                <section className="project-details-header">
-                  <Typography variant="h4" fontWeight={600}>
-                    Title: {activeProject.title}
-                  </Typography>
-                  <Typography variant="h5" fontWeight={600}>
-                    Description: {activeProject.description}
-                  </Typography>
-                </section>
-                <section className="project-details-table">
-                  <Typography
-                    variant="h5"
-                    fontWeight={600}
-                    sx={{
-                      padding: '1rem',
-                      backgroundColor: '#e65100',
-                      color: 'white',
-                      marginBottom: '1rem',
-                    }}
-                  >
-                    Assigned Personnel
-                  </Typography>
-                  <TableContainer>
+              Create
+            </Button>
+          </form>
+        </Box>
+      </Modal>
+      <Modal 
+        open={openDetailsModal} 
+        onClose={handleCloseDetailsModal}
+        sx={{
+          overflow: 'auto'
+        }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '0',
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            width: 'min(90vw, 1000px)',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}>
+          <Typography
+            variant="h5"
+            fontWeight={600}
+            fontSize="2.5rem"
+            textAlign="center">
+            Project Details
+          </Typography>
+          {activeProject ? (
+            <>
+              <section className="project-details-header">
+                <Typography variant="h4" fontWeight={600}>
+                  Title: {activeProject.title}
+                </Typography>
+                <Typography variant="h5" fontWeight={600}>
+                  Description: {activeProject.description}
+                </Typography>
+              </section>
+              <section className="project-details-table">
+                <Typography
+                  variant="h5"
+                  fontWeight={600}
+                  sx={{
+                    padding: '1rem',
+                    backgroundColor: '#e65100',
+                    color: 'white',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  Assigned Personnel
+                </Typography>
+                <TableContainer>
+                  <Table>
+                    <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                      <TableRow className="table-head">
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Role</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {activeProject.personnel.map((person) => {
+                        const user = findUserForProjectDetails(person);
+                        return (
+                          <TableRow className="table-body" key={user!.email}>
+                            <TableCell>{user!.name}</TableCell>
+                            <TableCell>{user!.email}</TableCell>
+                            <TableCell>{user!.role}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </section>
+              <section>
+                <Typography
+                  variant="h5"
+                  fontWeight={600}
+                  sx={{
+                    padding: '1rem',
+                    backgroundColor: '#e65100',
+                    color: 'white',
+                    marginBottom: '1rem',
+                  }}>
+                  Tickets for the Project
+                </Typography>
+                <TableContainer sx={{ overflow: 'auto' }}>
                     <Table>
-                      <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                      <TableHead sx={{ backgroundColor: '#1976d2'}}>
                         <TableRow className="table-head">
-                          <TableCell>Name</TableCell>
-                          <TableCell>Email</TableCell>
-                          <TableCell>Role</TableCell>
+                          <TableCell>Title</TableCell>
+                          <TableCell>Solver</TableCell>
+                          <TableCell>Priority</TableCell>
+                          <TableCell>Status</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {activeProject.personnel.map((person) => {
-                          const user = findUserForProjectDetails(person);
-                          return (
-                            <TableRow className="table-body" key={user!.email}>
-                              <TableCell>{user!.name}</TableCell>
-                              <TableCell>{user!.email}</TableCell>
-                              <TableCell>{user!.role}</TableCell>
-                            </TableRow>
-                          );
-                        })}
+                        {activeProject.tickets.map((ticket) => (
+                          <TableRow className="table-body" key={ticket._id}>
+                            <TableCell>{ticket.title}</TableCell>
+                            <TableCell>{ticket.solver}</TableCell>
+                            <TableCell>{ticket.priority}</TableCell>
+                            <TableCell>{ticket.status}</TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
-                  </TableContainer>
-                </section>
-                <section>
-                  <Typography
-                    variant="h5"
-                    fontWeight={600}
-                    sx={{
-                      padding: '1rem',
-                      backgroundColor: '#e65100',
-                      color: 'white',
-                      marginBottom: '1rem',
-                    }}
-                  >
-                    Tickets for the Project
-                  </Typography>
-                  <TableContainer sx={{ overflow: 'auto' }}>
-                      <Table>
-                        <TableHead sx={{ backgroundColor: '#1976d2'}}>
-                          <TableRow className="table-head">
-                            <TableCell>Title</TableCell>
-                            <TableCell>Solver</TableCell>
-                            <TableCell>Priority</TableCell>
-                            <TableCell>Status</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {activeProject.tickets.map((ticket) => (
-                            <TableRow className="table-body" key={ticket._id}>
-                              <TableCell>{ticket.title}</TableCell>
-                              <TableCell>{ticket.solver}</TableCell>
-                              <TableCell>{ticket.priority}</TableCell>
-                              <TableCell>{ticket.status}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                  </TableContainer>
-                </section>
-              </>
-            ) : null}
-          </Box>
-        </Modal>
-      </Container>
+                </TableContainer>
+              </section>
+            </>
+          ) : null}
+        </Box>
+      </Modal>
     </div>
   );
 };

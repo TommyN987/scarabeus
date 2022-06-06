@@ -30,6 +30,9 @@ import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
 
+  // ACTIVE USER
+  const userContext = useContext(AuthContext);
+
   // STATE FOR PROJECTS
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -37,10 +40,18 @@ const Tickets = () => {
   // STATE FOR ACTIVE TICKET
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null)
 
-  // STATE FOR MODALS
+  // STATE AND HANDLERS FOR MODALS
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const handleOpenCreateModal = () => setOpenCreateModal(true);
+  const handleCloseCreateModal = () => setOpenCreateModal(false);
+
   const [openDetailsModal, setOpenDetailsModal] = useState(false);
+  const handleOpenDetailsModal = () => setOpenDetailsModal(true);
+  const handleCloseDetailsModal = () => setOpenDetailsModal(false);
+
   const [openEditModal, setOpenEditModal] = useState(false);
+  const handleOpenEditModal = () => setOpenEditModal(true);
+  const handleCloseEditModal = () => setOpenEditModal(false);
 
   // STATE FOR ADDING A TICKET
   const [ticketTitle, setTicketTitle] = useState('');
@@ -52,18 +63,9 @@ const Tickets = () => {
   const [editedTicketPriority, setEditedTicketPriority] = useState('');
   const [editedTicketStatus, setEditedTicketStatus] = useState('');
 
+  // STATE FOR TRIGGERING FETCHALLPROJECTS
   const [trigger, setTrigger] = useState(false);
 
-
-  const userContext = useContext(AuthContext);
-
-  const handleOpenCreateModal = () => setOpenCreateModal(true);
-  const handleCloseCreateModal = () => setOpenCreateModal(false);
-  const handleOpenDetailsModal = () => setOpenDetailsModal(true);
-  const handleCloseDetailsModal = () => setOpenDetailsModal(false);
-  const handleOpenEditModal = () => setOpenEditModal(true);
-  const handleCloseEditModal = () => setOpenEditModal(false);
-  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -132,7 +134,7 @@ const Tickets = () => {
             padding: '1.5rem',
             minWidth: '830px',
           }}>
-          <Typography variant="h4" fontWeight={600}>
+          <Typography variant="h3" fontWeight={600}>
             Tickets
           </Typography>
           {allProjects.map(project => (
@@ -149,7 +151,7 @@ const Tickets = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                }}>{project.title} 
+                }}>Project: {project.title} 
                 <Button
                   variant="outlined"
                   color='inherit'
@@ -396,8 +398,8 @@ const Tickets = () => {
                       <TableCell>
                         {userContext?.activeUser?.role === 'Admin' || userContext?.activeUser?.role === 'Project Manager' ?
                         <Select
-                          labelId="[priority-select-label"
-                          id="[priority-select"
+                          labelId="priority-select-label"
+                          id="priority-select"
                           value={editedTicketPriority}
                           label="Pick"
                           color="primary"
