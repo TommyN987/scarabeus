@@ -25,13 +25,21 @@ import { updateProjectPersonnel } from '../../dbOperations/projectOperations'
 
 const Users = () => {
 
+  // ACTIVE USER
+  const userContext = useContext(AuthContext);
+
+  // STATE OF ALL USERS
   const [allUsers, setAllUsers] = useState<User[]>([]);
+  
+  // STATE FOR ROLE ASSIGNMENT
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
+  
+  // STATE FOR USER DELETION
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
+  
+  // STATE FOR TRIGGERING FETCHALLUSERS
   const [trigger, setTrigger] = useState(false);
-
-  const userContext = useContext(AuthContext);
 
   const roles = [
     'Admin',
@@ -98,8 +106,7 @@ const Users = () => {
               display: 'flex',
               flexDirection: 'column',
               gap: '1.5rem'
-            }}
-            >
+            }}>
             <Paper elevation={10}>
               <form className="user-roles-form">
                 <Typography
@@ -118,13 +125,13 @@ const Users = () => {
                     sx={{
                       width: '100%'
                     }}
-                    onChange={handleSelectedUserChange}
-                    >
+                    onChange={handleSelectedUserChange}>
                     {allUsers.map(user => (
                       <MenuItem
                         key={user.email}
                         value={user.name}
-                        >{user.name}</MenuItem>
+                        >{user.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -138,13 +145,13 @@ const Users = () => {
                     sx={{
                       width: '100%'
                     }}
-                    onChange={handleSelectedRoleChange}
-                    >
+                    onChange={handleSelectedRoleChange}>
                     {roles.map(role => (
                       <MenuItem
                         key={role}
                         value={role}
-                        >{role}</MenuItem>
+                        >{role}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -155,8 +162,7 @@ const Users = () => {
                   sx={{
                     width: '40%'
                   }}
-                  onClick={handleRoleAssignment}
-                  >
+                  onClick={handleRoleAssignment}>
                   Assign
                 </Button>
               </form>
@@ -165,8 +171,7 @@ const Users = () => {
               <form className="user-roles-form">
                 <Typography
                   variant="h4"
-                  fontWeight={600}
-                  >
+                  fontWeight={600}>
                   Delete User
                 </Typography>
                 <FormControl sx={{width: '100%'}}>
@@ -179,8 +184,7 @@ const Users = () => {
                     sx={{
                       width: '100%'
                     }}
-                    onChange={handleSelectedUserToDeleteChange}
-                    >
+                    onChange={handleSelectedUserToDeleteChange}>
                     {allUsers.map(user => (
                       <MenuItem
                         key={user.email}
@@ -198,8 +202,7 @@ const Users = () => {
                   sx={{
                     width: '40%'
                   }}
-                  onClick={handleDelete}
-                  >
+                  onClick={handleDelete}>
                   Delete
                 </Button>
               </form>
@@ -210,8 +213,7 @@ const Users = () => {
           <Container
             sx={{
               padding: '1.5rem'
-            }}
-            >
+            }}>
             <Paper
               elevation={10}
               sx={{
@@ -219,25 +221,21 @@ const Users = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 padding: '1.5rem'
-              }}
-              >
+              }}>
               <Typography
                 variant="h4"
-                fontWeight={600}
-                >
+                fontWeight={600}>
                 All Personnel
               </Typography>
               <TableContainer
                 sx={{
                   marginTop: '1rem'
-                }}
-                >
+                }}>
                 <Table>
                   <TableHead
                     sx={{
                       backgroundColor: '#1976d2'
-                    }}
-                    >
+                    }}>
                     <TableRow className='table-head'>
                       <TableCell>User Name</TableCell>
                       <TableCell>Email</TableCell>

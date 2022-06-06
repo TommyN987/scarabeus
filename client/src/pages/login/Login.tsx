@@ -18,7 +18,6 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      
       // LOGIN WITH FIREBASE
       await loginUser(email, password);
 
@@ -31,8 +30,7 @@ const Login = () => {
         role: loggedInUser.role,
         projects: loggedInUser.projects,
       });
-      navigate('/dashboard');
-      
+      navigate('/dashboard');      
     } catch(err: any) {
       console.log(err.message);
       alert('Invalid email or password');
@@ -74,16 +72,14 @@ const Login = () => {
           top: '20%',
           left: '50%',
           transform: 'translate(-50%, 0)'
-        }}
-        >
+        }}>
         <CardContent>
           <Typography 
             component="h2"
             fontSize='2rem'
             fontWeight={600}
             textAlign='center'
-            color='primary'
-            >
+            color='primary'>
             Login
           </Typography>
           <Box
@@ -94,8 +90,7 @@ const Login = () => {
               gap: '1rem',
               marginTop: '1rem'
             }}
-            onSubmit={handleSubmit}
-            >
+            onSubmit={handleSubmit}>
             <FormControl>
               <InputLabel htmlFor="email">Email</InputLabel>
               <Input
@@ -104,8 +99,7 @@ const Login = () => {
                 name="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Input>
+                onChange={(e) => setEmail(e.target.value)} />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="password">Password</InputLabel>
@@ -115,8 +109,7 @@ const Login = () => {
                 name="password"
                 id="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Input>
+                onChange={(e) => setPassword(e.target.value)}></Input>
             </FormControl>
             <Button
               type="submit"
@@ -129,14 +122,13 @@ const Login = () => {
           </Box>
         </CardContent>
         <Typography 
-            component="p"
-            fontSize='1rem'
-            fontWeight={400}
-            textAlign='center'
-            color='black'
-            >
-            Don't have an account yet? <Link to='/register'>Register</Link>
-          </Typography>
+          component="p"
+          fontSize='1rem'
+          fontWeight={400}
+          textAlign='center'
+          color='black'>
+          Don't have an account yet? <Link to='/register'>Register</Link>
+        </Typography>
       </Card>
     </div>
   )

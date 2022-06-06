@@ -72,8 +72,6 @@ const Projects = () => {
   // STATE FOR TRIGGERING FETCHALLPROJECTS
   const [trigger, setTrigger] = useState(false);
 
-
-
   const handlePersonnelSelectChange = (e: SelectChangeEvent<typeof newProjectPersonnel>) => {
     const { target: { value } } = e;
     setNewProjectPersonnel(

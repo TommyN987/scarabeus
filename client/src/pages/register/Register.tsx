@@ -49,7 +49,6 @@ const Register = () => {
     }
 
     try {
-      
       // CREATE USER IN FIREBASE
       await createUserInFirebase(newUser.email, newUser.password);
       
@@ -57,7 +56,6 @@ const Register = () => {
       await createUser(newUser);
       userContext?.setActiveUser(newUser);
       navigate('/dashboard');
-
     } catch(err: any) {
       console.log(err.message)
     }
@@ -98,16 +96,14 @@ const Register = () => {
           top: '13.5%',
           left: '50%',
           transform: 'translate(-50%, 0)'
-        }}
-        >
+        }}>
         <CardContent>
           <Typography 
             component="h2"
             fontSize='2rem'
             fontWeight={600}
             textAlign='center'
-            color='primary'
-            >
+            color='primary'>
             Register
           </Typography>
           <Box
@@ -118,9 +114,8 @@ const Register = () => {
               gap: '1rem',
               marginTop: '1rem'
             }}
-            onSubmit={handleSubmit}
-            >
-              <FormControl>
+            onSubmit={handleSubmit}>
+            <FormControl>
               <InputLabel htmlFor="name">Full Name</InputLabel>
               <Input
                 required
@@ -131,8 +126,7 @@ const Register = () => {
                 onChange={(e) => setNewUser({
                   ...newUser,
                   name: e.target.value
-                })}
-              ></Input>
+                })} />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="email">Email</InputLabel>
@@ -145,8 +139,7 @@ const Register = () => {
                 onChange={(e) => setNewUser({
                   ...newUser,
                   email: e.target.value
-                })}
-              ></Input>
+                })} />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="password">Password</InputLabel>
@@ -159,8 +152,7 @@ const Register = () => {
                 onChange={(e) => setNewUser({
                   ...newUser,
                   password: e.target.value
-                })}
-              ></Input>
+                })} />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="confirm-password">Confirm password</InputLabel>
@@ -170,8 +162,7 @@ const Register = () => {
                 name="confirm-password"
                 id="confirm-password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              ></Input>
+                onChange={(e) => setConfirmPassword(e.target.value)} />
             </FormControl>
             <Button
               type="submit"
@@ -179,19 +170,19 @@ const Register = () => {
               sx={{
                 marginTop: '1rem',
                 fontSize: '1.2rem'
-              }}
-              >Register</Button>
+              }}>
+              Register
+            </Button>
           </Box>
         </CardContent>
         <Typography 
-            component="p"
-            fontSize='1rem'
-            fontWeight={400}
-            textAlign='center'
-            color='black'
-            >
-            Already have an account? <Link to='/'>Login</Link>
-          </Typography>
+          component="p"
+          fontSize='1rem'
+          fontWeight={400}
+          textAlign='center'
+          color='black'>
+          Already have an account? <Link to='/'>Login</Link>
+        </Typography>
       </Card>
     </div>
   )
