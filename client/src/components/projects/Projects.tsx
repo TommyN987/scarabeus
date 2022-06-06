@@ -314,11 +314,16 @@ const Projects = () => {
             </form>
           </Box>
         </Modal>
-        <Modal open={openDetailsModal} onClose={handleCloseDetailsModal}>
+        <Modal 
+          open={openDetailsModal} 
+          onClose={handleCloseDetailsModal}
+          sx={{
+            overflow: 'auto'
+          }}>
           <Box
             sx={{
               position: 'absolute',
-              top: '80px',
+              top: '0',
               left: '50%',
               transform: 'translate(-50%, 0)',
               width: 'min(90vw, 1000px)',
@@ -396,6 +401,28 @@ const Projects = () => {
                   >
                     Tickets for the Project
                   </Typography>
+                  <TableContainer sx={{ overflow: 'auto' }}>
+                      <Table>
+                        <TableHead sx={{ backgroundColor: '#1976d2'}}>
+                          <TableRow className="table-head">
+                            <TableCell>Title</TableCell>
+                            <TableCell>Solver</TableCell>
+                            <TableCell>Priority</TableCell>
+                            <TableCell>Status</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {activeProject.tickets.map((ticket) => (
+                            <TableRow className="table-body" key={ticket._id}>
+                              <TableCell>{ticket.title}</TableCell>
+                              <TableCell>{ticket.solver}</TableCell>
+                              <TableCell>{ticket.priority}</TableCell>
+                              <TableCell>{ticket.status}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                  </TableContainer>
                 </section>
               </>
             ) : null}

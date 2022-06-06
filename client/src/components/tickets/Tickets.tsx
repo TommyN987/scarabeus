@@ -75,7 +75,7 @@ const Tickets = () => {
     } catch (err: any) {
       console.log(err.message);
     }
-
+    setTrigger(trigger => !trigger);
     setActiveProject(null);
     setTicketTitle('');
     setTicketDescription('');
@@ -86,14 +86,13 @@ const Tickets = () => {
   const handleEdit = async (project: string, title: string, priority: string, status: string, solver: string) => {
     
     try {
-      const newTicket = await updateTicket(project, title, priority, status, solver);
-      console.log(newTicket)
-      setTrigger(trigger => !trigger);
+      await updateTicket(project, title, priority, status, solver);
       setOpenEditModal(false);
       setEditedTicketPriority('');
       setEditedTicketSolver('');
       setEditedTicketStatus('');
       setActiveProject(null);
+      setTrigger(trigger => !trigger);
     } catch (err: any) {
       console.log(err.message)
     }
@@ -108,6 +107,7 @@ const Tickets = () => {
           const projectsToDisplay = projects.filter((project) =>
             project.personnel.includes(userContext!.activeUser!.name)
           );
+          console.log(projectsToDisplay)
           setAllProjects(projectsToDisplay);
         }
       })
@@ -298,6 +298,9 @@ const Tickets = () => {
       <Modal
         open={openEditModal}
         onClose={handleCloseEditModal}
+        sx={{
+          overflow: 'auto'
+        }}
         >
         <Box
           sx={{
@@ -448,6 +451,9 @@ const Tickets = () => {
       <Modal
         open={openDetailsModal}
         onClose={handleCloseDetailsModal}
+        sx={{
+          overflow: 'auto'
+        }}
         >
         <Box
           sx={{
