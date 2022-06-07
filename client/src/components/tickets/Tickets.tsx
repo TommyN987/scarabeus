@@ -618,7 +618,9 @@ const Tickets = () => {
                         <TableCell>{comment.message}</TableCell>
                         <TableCell>{parseTimestamp(comment.created).time}, {parseTimestamp(comment.created).date}</TableCell>
                         <TableCell>
-                          <DeleteIcon 
+                          {userContext?.activeUser?.role === 'Admin' || userContext?.activeUser?.name === comment.commenter
+                            ?
+                            <DeleteIcon 
                             color='action'
                             sx={{
                               cursor: 'pointer'
@@ -627,6 +629,8 @@ const Tickets = () => {
                               handleDeleteComment(activeProject!.title, activeTicket.title, comment._id)
                             }}
                             />
+                            :
+                            null}
                         </TableCell>
                       </TableRow>
                     ))}
