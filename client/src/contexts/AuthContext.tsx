@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  deleteUser
+  deleteUser,
 } from 'firebase/auth';
 
 import { auth } from "../firebase";
