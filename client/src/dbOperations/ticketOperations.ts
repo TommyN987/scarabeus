@@ -52,3 +52,18 @@ export const addComment = async (project: string, title: string, commenter: stri
     })
   })
 }
+
+export const deleteComment = async (project: string, ticket: string, _id: string) => {
+  await fetch('http://localhost:5000/dashboard/tickets/delete', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: project,
+      ticketTitle: ticket,
+      _id: _id
+    })
+  })
+  console.log(project, ticket, _id)
+}

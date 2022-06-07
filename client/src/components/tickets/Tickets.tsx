@@ -24,10 +24,11 @@ import Tooltip from '@mui/material/Tooltip';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import TextField from '@mui/material/TextField';
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects, fetchOneProject } from "../../dbOperations/projectOperations";
-import { addTicket, updateTicket, addComment } from '../../dbOperations/ticketOperations';
+import { addTicket, updateTicket, addComment, deleteComment } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
 
 const Tickets = () => {
@@ -125,6 +126,16 @@ const Tickets = () => {
     setComment('');
     setTrigger(trigger => !trigger);
     activeProject && await handleTicketReload(activeProject, title);
+  }
+
+  const handleDeleteComment = async (project: string, ticket: string, _id: string) => {
+    try {
+      await deleteComment(project, ticket, _id);
+      setTrigger(trigger => !trigger);
+      activeProject && await handleTicketReload(activeProject, ticket);
+    } catch (err: any) {
+      console.log(err.message)
+    }
   }
 
   const parseTimestamp = (timestamp: string) => {
@@ -597,6 +608,7 @@ const Tickets = () => {
                       <TableCell>Commenter</TableCell>
                       <TableCell>Message</TableCell>
                       <TableCell>Posted</TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -605,6 +617,17 @@ const Tickets = () => {
                         <TableCell>{comment.commenter}</TableCell>
                         <TableCell>{comment.message}</TableCell>
                         <TableCell>{parseTimestamp(comment.created).time}, {parseTimestamp(comment.created).date}</TableCell>
+                        <TableCell>
+                          <DeleteIcon 
+                            color='action'
+                            sx={{
+                              cursor: 'pointer'
+                            }}
+                            onClick={() => {
+                              handleDeleteComment(activeProject!.title, activeTicket.title, comment._id)
+                            }}
+                            />
+                        </TableCell>
                       </TableRow>
                     ))}
                     </TableBody>

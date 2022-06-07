@@ -44,3 +44,18 @@ export const addComment = async (req, res) => {
     res.status(404).json({ message: err.message })
   }
 }
+
+export const deleteComment = async (req, res) => {
+  try {
+    const project = await Project.findOne({ title: req.body.title });
+    const { tickets } = project;
+    const ticketIndex = tickets.findIndex(({ title }) => title == req.body.ticketTitle);
+    const { comments } = tickets[ticketIndex];
+    const commentIndex = comments.findIndex(({ _id }) => _id == req.body._id);
+    comments.splice(commentIndex, 1);
+    project.save();
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
