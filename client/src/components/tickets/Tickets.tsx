@@ -26,7 +26,7 @@ import TextField from '@mui/material/TextField';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { fetchAllProjects } from "../../dbOperations/projectOperations";
+import { fetchAllProjects, fetchOneProject } from "../../dbOperations/projectOperations";
 import { addTicket, updateTicket, addComment } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
 
@@ -103,6 +103,15 @@ const Tickets = () => {
     } catch (err: any) {
       console.log(err.message)
     }
+  };
+
+  const handleTicketReload = async (project: Project, ticketTitle: string) => {
+    const updatedProject = await fetchOneProject(project.title);
+    setActiveProject(updatedProject);
+    const updatedTicket = updatedProject.tickets.find((ticket: Ticket) => ticket.title === ticketTitle);
+    setActiveTicket(updatedTicket);
+    setOpenDetailsModal(false);
+    setOpenDetailsModal(true);
   }
 
   const handleAddComment = async (project: string, title: string, message: string) => {
@@ -113,11 +122,9 @@ const Tickets = () => {
     } catch (err: any) {
       console.log(err.message)
     }
-    setOpenDetailsModal(false);
     setComment('');
     setTrigger(trigger => !trigger);
-    setActiveProject(null);
-    setActiveTicket(null);
+    activeProject && handleTicketReload(activeProject, title);
   }
 
   useEffect(() => {
@@ -129,7 +136,6 @@ const Tickets = () => {
           const projectsToDisplay = projects.filter((project) =>
             project.personnel.includes(userContext!.activeUser!.name)
           );
-          console.log(projectsToDisplay)
           setAllProjects(projectsToDisplay);
         }
       })
@@ -501,7 +507,7 @@ const Tickets = () => {
         <Box
           sx={{
             position: 'absolute',
-            top: '80px',
+            top: '0',
             left: '50%',
             transform: 'translate(-50%, 0)',
             width: 'min(90vw, 1000px)',
@@ -572,10 +578,34 @@ const Tickets = () => {
                   padding: '1rem',
                   backgroundColor: '#e65100',
                   color: 'white',
-                  marginBottom: '1rem',
+                  marginBottom: '.5rem',
                 }}>
                 Comments
               </Typography>
+              {activeTicket.comments.length > 0 &&
+              
+              <TableContainer>
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#1976d2' }}>
+                    <TableRow className="table-head">
+                      <TableCell>Commenter</TableCell>
+                      <TableCell>Message</TableCell>
+                      <TableCell>Posted</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {activeTicket.comments.map((comment) => (
+                      <TableRow className="table-body">
+                        <TableCell>{comment.commenter}</TableCell>
+                        <TableCell>{comment.message}</TableCell>
+                        <TableCell>{comment.created}</TableCell>
+                      </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+              </TableContainer>
+              
+              }
             </section>
           </> 
           : null}
