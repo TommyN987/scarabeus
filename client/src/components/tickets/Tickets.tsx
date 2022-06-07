@@ -127,6 +127,12 @@ const Tickets = () => {
     activeProject && handleTicketReload(activeProject, title);
   }
 
+  const parseTimestamp = (timestamp: string) => {
+    const date = timestamp.slice(0, 10);
+    const time = timestamp.slice(11, 19);
+    return { date, time }
+  }
+
   useEffect(() => {
     fetchAllProjects()
       .then((projects) => {
@@ -461,7 +467,7 @@ const Tickets = () => {
                           <MenuItem value='Closed'>Closed</MenuItem>
                         </Select>
                       </TableCell>
-                      <TableCell>{activeTicket.created.toString()}</TableCell>
+                      <TableCell>{parseTimestamp(activeTicket.created.toString()).time}, {parseTimestamp(activeTicket.created.toString()).date}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -564,7 +570,7 @@ const Tickets = () => {
                       <TableCell>{activeTicket.solver}</TableCell>
                       <TableCell>{activeTicket.priority}</TableCell>
                       <TableCell>{activeTicket.status}</TableCell>
-                      <TableCell>{activeTicket.created.toString()}</TableCell>
+                      <TableCell>{parseTimestamp(activeTicket.created.toString()).time}, {parseTimestamp(activeTicket.created.toString()).date}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -598,7 +604,7 @@ const Tickets = () => {
                       <TableRow className="table-body">
                         <TableCell>{comment.commenter}</TableCell>
                         <TableCell>{comment.message}</TableCell>
-                        <TableCell>{comment.created}</TableCell>
+                        <TableCell>{parseTimestamp(comment.created).time}, {parseTimestamp(comment.created).date}</TableCell>
                       </TableRow>
                     ))}
                     </TableBody>
