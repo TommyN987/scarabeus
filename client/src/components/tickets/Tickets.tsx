@@ -108,7 +108,7 @@ const Tickets = () => {
   const handleTicketReload = async (project: Project, ticketTitle: string) => {
     const updatedProject = await fetchOneProject(project.title);
     setActiveProject(updatedProject);
-    const updatedTicket = updatedProject.tickets.find((ticket: Ticket) => ticket.title === ticketTitle);
+    const updatedTicket = await updatedProject.tickets.find((ticket: Ticket) => ticket.title === ticketTitle);
     setActiveTicket(updatedTicket);
     setOpenDetailsModal(false);
     setOpenDetailsModal(true);
@@ -117,14 +117,14 @@ const Tickets = () => {
   const handleAddComment = async (project: string, title: string, message: string) => {
     try {
       if (userContext && userContext.activeUser) {
-        await addComment(project, title, userContext.activeUser.name, message)
+        await addComment(project, title, userContext.activeUser.name, message);
       }
     } catch (err: any) {
       console.log(err.message)
     }
     setComment('');
     setTrigger(trigger => !trigger);
-    activeProject && handleTicketReload(activeProject, title);
+    activeProject && await handleTicketReload(activeProject, title);
   }
 
   const parseTimestamp = (timestamp: string) => {
