@@ -145,7 +145,7 @@ const Tickets = () => {
           setAllProjects(projectsToDisplay);
         }
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.log(err));
   }, [userContext, trigger])
 
   return (

@@ -138,7 +138,7 @@ const Projects = () => {
           setAllProjects(projectsToDisplay);
         }
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.log(err));
   }, [trigger, userContext]);
 
   return (
