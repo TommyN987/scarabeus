@@ -27,6 +27,21 @@ export const createProject = async (project: Project) => {
   });
 };
 
+export const editProject = async (prevTitle: string, newTitle: string, description: string, personnel: string[]) => {
+  await fetch('http://localhost:5000/dashboard/projects/', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prevTitle: prevTitle,
+      newTitle: newTitle,
+      description: description,
+      personnel: personnel
+    })
+  })
+}
+
 export const updateProjectPersonnel = async (title: string, user: string) => {
   await fetch('http://localhost:5000/dashboard/projects/remove', {
     method: 'PATCH',

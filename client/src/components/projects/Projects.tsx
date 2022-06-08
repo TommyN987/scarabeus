@@ -36,6 +36,7 @@ import {
   createProject,
   fetchAllProjects,
   fetchOneProject,
+  editProject,
   deleteProject,
 } from '../../dbOperations/projectOperations';
 
@@ -119,6 +120,23 @@ const Projects = () => {
     handleCloseCreationModal();
     setTrigger((trigger) => !trigger);
   };
+
+  const handleEdit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await editProject(activeProject!.title, newProjectTitle, newProjectDescription, newProjectPersonnel);
+    } catch(err: any) {
+      console.log(err.message)
+    }
+
+    setActiveProject(null);
+    setNewProjectTitle('');
+    setNewProjectDescription('');
+    setNewProjectPersonnel([]);
+    handleCloseEditModal();
+    setTrigger((trigger) => !trigger);
+  }
 
   const handleDelete = async (project: Project) => {
     await deleteProject(project.title);
@@ -469,7 +487,7 @@ const Projects = () => {
           >
             Edit Project
           </Typography>
-          <form className="new-project-form" onSubmit={() => {}}>
+          <form className="new-project-form" onSubmit={handleEdit}>
             <FormControl>
               <InputLabel htmlFor="title">Title</InputLabel>
               <Input
@@ -535,7 +553,7 @@ const Projects = () => {
                 fontSize: '1.2rem',
               }}
             >
-              Create
+              Edit
             </Button>
           </form>
         </Box>

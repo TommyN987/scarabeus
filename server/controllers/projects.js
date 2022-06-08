@@ -44,6 +44,19 @@ export const removePersonnelFromProject = async (req, res) => {
   }
 }
 
+export const editProject = async (req, res) => {
+  try {
+    const project = await Project.updateOne({ title: req.body.prevTitle }, {$set: {
+      title: req.body.newTitle,
+      description: req.body.description,
+      personnel: req.body.personnel
+    }});
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
+}
+
 export const deleteProject = async (req, res) => {
   try {
     const project = await Project.deleteOne({ title: req.body.title });
