@@ -174,7 +174,7 @@ const Tickets = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '1.5rem',
+            padding: '2.5rem 1.5rem',
             minWidth: '830px',
           }}>
           <Typography variant="h3" fontWeight={600}>
@@ -424,7 +424,6 @@ const Tickets = () => {
                           labelId="solver-select-label"
                           id="solver-select"
                           value={editedTicketSolver}
-                          label="Pick"
                           sx={{
                             width: '100%',
                           }}
@@ -446,7 +445,6 @@ const Tickets = () => {
                           labelId="priority-select-label"
                           id="priority-select"
                           value={editedTicketPriority}
-                          label="Pick"
                           color="primary"
                           sx={{
                             width: '100%',
@@ -466,7 +464,6 @@ const Tickets = () => {
                           labelId="[status-select-label"
                           id="[status-select"
                           value={editedTicketStatus}
-                          label="Pick"
                           color="primary"
                           sx={{
                             width: '100%',
@@ -497,19 +494,6 @@ const Tickets = () => {
               >
               Edit
             </Button>
-            <section className='project-details-table'>
-              <Typography
-                variant="h5"
-                fontWeight={600}
-                sx={{
-                  padding: '1rem',
-                  backgroundColor: '#e65100',
-                  color: 'white',
-                  marginBottom: '1rem',
-                }}>
-                Comments
-              </Typography>
-            </section>
           </> 
           : null}
         </Box>

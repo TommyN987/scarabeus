@@ -64,6 +64,17 @@ const Projects = () => {
   };
   const handleCloseDetailsModal = () => setOpenDetailsModal(false);
 
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const handleOpenEditModal = async (project: Project) => {
+    const fetchedProject = await fetchOneProject(project.title);
+    setActiveProject(fetchedProject);
+    setOpenEditModal(true);
+    setNewProjectTitle(project.title);
+    setNewProjectDescription(project.description);
+    setNewProjectPersonnel(project.personnel)
+  };
+  const handleCloseEditModal = () => setOpenEditModal(false);
+
   // STATE FOR NEW PROJECT DATA
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
@@ -157,7 +168,7 @@ const Projects = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '1.5rem',
+            padding: '2.5rem 1.5rem',
             minWidth: '830px',
           }}
           >
@@ -201,7 +212,10 @@ const Projects = () => {
                         />
                       </Tooltip>
                       {(userContext?.activeUser?.role === 'Project Manager' || userContext?.activeUser?.role === 'Admin') && <Tooltip title="Edit" arrow>
-                        <EditIcon color="action" />
+                        <EditIcon 
+                          color="action"
+                          onClick={() => handleOpenEditModal(project)}
+                        />
                       </Tooltip>}
                       {userContext?.activeUser?.role === 'Admin' && <Tooltip title="Delete" arrow>
                         <DeleteIcon
@@ -431,6 +445,99 @@ const Projects = () => {
               </section>
             </>
           ) : null}
+        </Box>
+      </Modal>
+      <Modal open={openEditModal} onClose={handleCloseEditModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '80px',
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            width: '500px',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography
+            variant="h5"
+            color="primary"
+            fontWeight={600}
+            textAlign="center"
+          >
+            Edit Project
+          </Typography>
+          <form className="new-project-form" onSubmit={() => {}}>
+            <FormControl>
+              <InputLabel htmlFor="title">Title</InputLabel>
+              <Input
+                required
+                type="text"
+                name="title"
+                id="title"
+                value={newProjectTitle}
+                onChange={(e) => setNewProjectTitle(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel htmlFor="description">Description</InputLabel>
+              <Input
+                required
+                type="text"
+                name="description"
+                id="description"
+                value={newProjectDescription}
+                onChange={(e) => setNewProjectDescription(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel id="personnel-select-label">
+                Select personnel
+              </InputLabel>
+              <Select
+                labelId="personnel-select-label"
+                id="personnel-select"
+                multiple
+                required
+                value={newProjectPersonnel}
+                onChange={handlePersonnelSelectChange}
+                input={<OutlinedInput label="Select personnel" />}
+                renderValue={(selected): React.ReactNode => {
+                  return (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 0.5,
+                      }}
+                    >
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  );
+                }}
+              >
+                {allUsers.map((user) => (
+                  <MenuItem className='new-project-personnel' key={user.name} value={user.name}>
+                    <span>{user.name}</span><span>{user.role}</span>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                marginTop: '1rem',
+                fontSize: '1.2rem',
+              }}
+            >
+              Create
+            </Button>
+          </form>
         </Box>
       </Modal>
     </div>
