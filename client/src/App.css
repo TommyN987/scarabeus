@@ -129,3 +129,9 @@ li {
   align-items: center;
   gap: 1rem;
 }
+
+.profile {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
