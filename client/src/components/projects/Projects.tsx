@@ -29,7 +29,8 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { User, Project } from '../../types/types';
 import {
   fetchAllUsers,
-  updateUserProjects,
+  updateUserProjects, 
+  handleProjectsEditInUser,
   removeUserProjects,
 } from '../../dbOperations/userOperations';
 import {
@@ -126,6 +127,8 @@ const Projects = () => {
 
     try {
       await editProject(activeProject!.title, newProjectTitle, newProjectDescription, newProjectPersonnel);
+      await handleProjectsEditInUser(activeProject!.personnel, newProjectPersonnel, activeProject!.title);
+      console.log(activeProject)
     } catch(err: any) {
       console.log(err.message)
     }

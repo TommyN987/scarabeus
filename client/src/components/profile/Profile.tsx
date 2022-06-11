@@ -55,7 +55,6 @@ const Profile = () => {
       })
     });
     }
-    console.log(userTickets)
     setTickets(userTickets);
   }, [projects, userContext?.activeUser])
 

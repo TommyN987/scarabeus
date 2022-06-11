@@ -47,6 +47,21 @@ export const updateUserProjects = async (name: string, project: string) => {
   });
 };
 
+export const handleProjectsEditInUser = async (prevPersonnel: string[], newPersonnel: string[], project: string) => {
+  await fetch('http://localhost:5000/dashboard/users/edit', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prevPersonnel: prevPersonnel,
+      newPersonnel: newPersonnel,
+      project: project
+    })
+  })
+  console.log(prevPersonnel)
+}
+
 export const removeUserProjects = async (name: string, project: string) => {
   await fetch(`http://localhost:5000/dashboard/users/remove`, {
     method: 'PATCH',
