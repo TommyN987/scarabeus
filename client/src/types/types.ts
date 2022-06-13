@@ -47,3 +47,7 @@ export type Ticket = {
   _id: string,
   comments: any[]
 }
+
+export type CloseButtonProps = {
+  onClick: Function
+}

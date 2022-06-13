@@ -40,6 +40,7 @@ import {
   editProject,
   deleteProject,
 } from '../../dbOperations/projectOperations';
+import { CloseButton } from '../close-icon/CloseIcon';
 
 const Projects = () => {
   
@@ -355,6 +356,7 @@ const Projects = () => {
               Create
             </Button>
           </form>
+          <CloseButton onClick={handleCloseCreationModal} />
         </Box>
       </Modal>
       <Modal 
@@ -466,6 +468,7 @@ const Projects = () => {
               </section>
             </>
           ) : null}
+          <CloseButton onClick={handleCloseDetailsModal} />
         </Box>
       </Modal>
       <Modal open={openEditModal} onClose={handleCloseEditModal}>
@@ -559,6 +562,7 @@ const Projects = () => {
               Edit
             </Button>
           </form>
+          <CloseButton onClick={handleCloseEditModal} />
         </Box>
       </Modal>
     </div>

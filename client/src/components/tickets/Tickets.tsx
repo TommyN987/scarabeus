@@ -30,6 +30,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { fetchAllProjects, fetchOneProject } from "../../dbOperations/projectOperations";
 import { addTicket, updateTicket, addComment, deleteComment } from '../../dbOperations/ticketOperations';
 import { Project, Ticket } from "../../types/types";
+import { CloseButton } from '../close-icon/CloseIcon';
 
 const Tickets = () => {
 
@@ -352,6 +353,7 @@ const Tickets = () => {
               Add ticket
             </Button>
           </form>
+          <CloseButton onClick={handleCloseCreateModal} />
         </Box>
       </Modal>
       <Modal
@@ -496,6 +498,7 @@ const Tickets = () => {
             </Button>
           </> 
           : null}
+          <CloseButton onClick={handleCloseEditModal} />
         </Box>
       </Modal>
       <Modal
@@ -657,6 +660,7 @@ const Tickets = () => {
               Add Comment
             </Button>
           </div>
+          <CloseButton onClick={handleCloseDetailsModal} />
         </Box>
       </Modal>
     </div>
