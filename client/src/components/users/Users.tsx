@@ -17,6 +17,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import { User } from "../../types/types";
 import { deleteUserFromFirebase, AuthContext } from "../../contexts/AuthContext";
@@ -37,6 +42,7 @@ const Users = () => {
   
   // STATE FOR USER DELETION
   const [selectedUserToDelete, setSelectedUserToDelete] = useState('');
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   
   // STATE FOR TRIGGERING FETCHALLUSERS
   const [trigger, setTrigger] = useState(false);
@@ -65,6 +71,9 @@ const Users = () => {
   const handleSelectedUserToDeleteChange = async (e: SelectChangeEvent) => {
     setSelectedUserToDelete(e.target.value);
   };
+
+  const handleOpenDeleteDialog = () => setOpenDeleteDialog(true);
+  const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
 
   const handleRoleAssignment = async (e: FormEvent) => {
     e.preventDefault();
@@ -202,7 +211,10 @@ const Users = () => {
                   sx={{
                     width: '40%'
                   }}
-                  onClick={handleDelete}>
+                  onClick={(e: FormEvent) => {
+                    e.preventDefault();
+                    handleOpenDeleteDialog()
+                  }}>
                   Delete
                 </Button>
               </form>
@@ -265,6 +277,31 @@ const Users = () => {
           </Container>
         </Grid>
       </Grid>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        >
+        <DialogTitle>
+          {'Do you want to delete the selected user?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action is irrevocable
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant='outlined'
+            onClick={handleCloseDeleteDialog}
+            >Cancel</Button>
+          <Button
+            color='error'
+            variant='contained'
+            onClick={handleDelete}
+            >Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

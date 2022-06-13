@@ -24,6 +24,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { User, Project } from '../../types/types';
@@ -77,6 +82,10 @@ const Projects = () => {
     setNewProjectPersonnel(project.personnel)
   };
   const handleCloseEditModal = () => setOpenEditModal(false);
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const handleOpenDeleteDialog = () => setOpenDeleteDialog(true);
+  const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
 
   // STATE FOR NEW PROJECT DATA
   const [newProjectTitle, setNewProjectTitle] = useState('');
@@ -242,7 +251,10 @@ const Projects = () => {
                       {userContext?.activeUser?.role === 'Admin' && <Tooltip title="Delete" arrow>
                         <DeleteIcon
                           color="action"
-                          onClick={() => {handleDelete(project)}}
+                          onClick={() => {
+                            setActiveProject(project);
+                            handleOpenDeleteDialog();
+                          }}
                         />
                       </Tooltip>}
                     </TableCell>
@@ -565,6 +577,34 @@ const Projects = () => {
           <CloseButton onClick={handleCloseEditModal} />
         </Box>
       </Modal>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        >
+        <DialogTitle>
+          {'Do you want to delete the selected project?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action is irrevocable
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant='outlined'
+            onClick={handleCloseDeleteDialog}
+            >Cancel</Button>
+          <Button
+            color='error'
+            variant='contained'
+            onClick={() => {
+              handleDelete(activeProject!);
+              handleCloseDeleteDialog();
+            }}
+            >Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
