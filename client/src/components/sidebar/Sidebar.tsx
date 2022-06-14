@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Drawer from "@mui/material/Drawer";
@@ -13,6 +13,11 @@ import GroupIcon from '@mui/icons-material/Group';
 import TopicIcon from '@mui/icons-material/Topic';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import PersonIcon from '@mui/icons-material/Person';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
 
 import scarab from '../../assets/images/scarab-logo.png';
 import { AuthContext, logoutUser } from '../../contexts/AuthContext';
@@ -20,10 +25,19 @@ import { theme } from '../../styles/custom-theme';
 
 const Sidebar = () => {
 
-  const [activeTab, setActiveTab] = useState<'Dashboard' | 'Users' | 'Projects' | 'Tickets' | 'Profile'>('Dashboard')
-
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState<'Dashboard' | 'Users' | 'Projects' | 'Tickets' | null>('Dashboard');
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (e: any) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = async () => {
     try {
@@ -43,25 +57,15 @@ const Sidebar = () => {
           sx={{
             color: `${theme.palette.text.primary}`
           }}>
-          User: {userContext?.activeUser?.name || 'test'}
+          Welcome, {userContext?.activeUser?.name || 'test'}!
         </Typography>
-        <Typography
-          variant="h6"
-          sx={{
-            color: `${theme.palette.text.primary}`
-          }}>
-          Role: {userContext?.activeUser?.role || 'test'}
-        </Typography>
-        <Button 
-          variant='contained'
-          color="error"
-          size="medium"
-          sx={{
-            width: '150px',
-          }}
-          onClick={handleLogout}
-          >Logout
-        </Button>
+        <Tooltip title='Account settings'>
+          <AccountCircleIcon 
+            fontSize='large'
+            color='action' 
+            onClick={handleClick} />
+        </Tooltip>
+        
       </div>
       <Drawer
         variant='permanent'
@@ -132,17 +136,71 @@ const Sidebar = () => {
             <ListItemIcon><AssignmentIcon /></ListItemIcon>
             <ListItemText primary='Tickets' />
           </ListItem>
-          <ListItem 
-            className={activeTab === 'Profile' ? 'sidebar-nav sidebar-active-nav' : 'sidebar-nav'}
-            onClick={() => {
-              navigate('/dashboard/profile')
-              setActiveTab('Profile')
-              }}>
-            <ListItemIcon><PersonIcon /></ListItemIcon>
-            <ListItemText primary='User Profile' />
-          </ListItem>
         </List>
       </Drawer>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem>
+          User: &nbsp; <strong>{userContext?.activeUser?.name}</strong>
+        </MenuItem>
+        <MenuItem>
+          Role:&nbsp; <strong>{userContext?.activeUser?.role}</strong>
+        </MenuItem>
+        <MenuItem
+          onClick={() => navigate('/dashboard/profile')}
+          >
+          My Profile
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          Settings
+        </MenuItem>
+        <MenuItem>
+          <Button 
+            variant='contained'
+            color="error"
+            size="medium"
+            sx={{
+              width: '150px',
+            }}
+            onClick={handleLogout}
+            >Logout
+          </Button>
+        </MenuItem>
+      </Menu>
     </>
   )
 }
