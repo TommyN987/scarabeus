@@ -140,11 +140,12 @@ const Charts = () => {
 
   return (
     <div className='inner-content'>
-      <Grid 
+      <Grid
         container
-        sx={{ height: 100}}
+        spacing={2}
+        sx={{ justifyContent: 'center'}}
         >
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={5}>
           <Container
             sx={{
               padding: '1.5rem',
@@ -202,7 +203,10 @@ const Charts = () => {
                 >
                 My Tickets by Priority
               </Typography>
-              <Pie 
+              <Pie
+                options={{
+                  responsive: true
+                }}
                 data={{
                   labels: [
                     'Low',
@@ -223,7 +227,7 @@ const Charts = () => {
             </Paper>}
           </Container>
         </Grid>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={5}>
           <Container
             sx={{
               padding: '1.5rem',
@@ -241,7 +245,8 @@ const Charts = () => {
                 >
                 Tickets by Status
               </Typography>
-              <Pie 
+              <Pie
+                options={{ responsive: true }}
                 data={{
                   labels: [
                     'Open',
@@ -260,18 +265,6 @@ const Charts = () => {
                 }}
               />
             </Paper>
-          </Container>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Container
-            sx={{
-              padding: '1.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem'
-            }}
-            >
-            
           </Container>
         </Grid>
       </Grid>
