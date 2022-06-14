@@ -61,3 +61,15 @@ export type ChartOneData = {
     highs: number[]
   }
 }
+
+export type ChartTwoData = {
+  open: number,
+  inProcess: number,
+  closed: number
+}
+
+export type ChartThreeData = {
+  lows: number,
+  mediums: number,
+  highs: number
+}

@@ -34,7 +34,7 @@ const Dashboard = () => {
         userContext?.setActiveUser(user)
       }
     }
-  }, [])
+  }, [userContext])
 
   useEffect(() => {
     localStorage.setItem('activeScarabeus',JSON.stringify(userContext?.activeUser)) 

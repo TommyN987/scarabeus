@@ -12,18 +12,20 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend, 
+  ArcElement
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { Project, ChartOneData } from '../../types/types';
+import { Project, ChartOneData, ChartTwoData, ChartThreeData } from '../../types/types';
 import { fetchAllProjects } from '../../dbOperations/projectOperations'
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -34,8 +36,9 @@ const Charts = () => {
   const userContext = useContext(AuthContext);
 
   const [projects, setProjects] = useState<Project[]>([]);
-  const [chartOneData, setChartOneData] = useState<ChartOneData>()
-
+  const [chartOneData, setChartOneData] = useState<ChartOneData>();
+  const [chartTwoData, setChartTwoData] = useState<ChartTwoData>();
+  const [chartThreeData, setChartThreeData] = useState<ChartThreeData>();
 
   useEffect(() => {
     fetchAllProjects()
@@ -54,12 +57,16 @@ const Charts = () => {
       let medium: number = 0;
       let high: number = 0;
       project.tickets.forEach(ticket => {
-        if (ticket.priority === 'Low') {
-          low++
-        } else if (ticket.priority === 'Medium') {
-          medium++
-        } else if (ticket.priority === 'High') {
-          high++
+        switch (ticket.priority) {
+          case 'Low':
+            low++;
+            break;
+          case 'Medium':
+            medium++;
+            break;
+          case 'High':
+            high++;
+            break;
         }
       })
       lows.push(low);
@@ -77,9 +84,66 @@ const Charts = () => {
     })
   }, [projects]);
 
+  useEffect(() => {
+    let open: number = 0;
+    let inProcess: number = 0;
+    let closed: number = 0;
+    projects.forEach(project => {
+      project.tickets.forEach(ticket => {
+        switch (ticket.status) {
+          case 'Open':
+            open++;
+            break;
+          case 'In Process':
+            inProcess++;
+            break;
+          case 'Closed':
+            closed++;
+            break;
+        }
+      })
+    })
+    setChartTwoData({
+      open: open,
+      inProcess: inProcess,
+      closed: closed
+    })
+  }, [projects]);
+
+  useEffect(() => {
+    let lows: number = 0;
+    let mediums: number = 0;
+    let highs: number = 0;
+    projects.forEach(project => {
+      project.tickets.forEach(ticket => {
+        if (ticket.solver === userContext?.activeUser?.name) {
+          switch (ticket.priority) {
+            case 'Low':
+              lows++;
+              break;
+            case 'Medium':
+              mediums++;
+              break;
+            case 'High':
+              highs++;
+              break;
+          }
+        }
+      })
+    })
+    setChartThreeData({
+      lows: lows,
+      mediums: mediums,
+      highs: highs
+    })
+  }, [projects, userContext])
+
   return (
     <div className='inner-content'>
-      <Grid container>
+      <Grid 
+        container
+        sx={{ height: 100}}
+        >
         <Grid item xs={12} lg={6}>
           <Container
             sx={{
@@ -113,21 +177,50 @@ const Charts = () => {
                     {
                       label: chartOneData?.labels[0],
                       data: [...chartOneData!.tickets!.lows],
-                      backgroundColor: 'rgb(255, 99, 132)'
+                      backgroundColor: 'rgb(0, 255, 0)'
                     },
                     {
                       label: chartOneData?.labels[1],
                       data: [...chartOneData!.tickets!.mediums],
-                      backgroundColor: 'rgb(75, 192, 192)'
+                      backgroundColor: 'rgb(0, 0, 255)'
                     },
                     {
                       label: chartOneData?.labels[2],
                       data: [...chartOneData!.tickets!.highs],
-                      backgroundColor: 'rgb(53, 162, 235)'
+                      backgroundColor: 'rgb(255, 0, 0)'
                     },
                   ]
                 }} />}
             </Paper>
+            {userContext?.activeUser?.role !== 'Admin' &&
+            <Paper elevation={10} sx={{ padding: 2 }}>
+              <Typography
+                variant='h5'
+                fontWeight={600}
+                textAlign="center"
+                sx={{ marginBottom: 2 }}
+                >
+                My Tickets by Priority
+              </Typography>
+              <Pie 
+                data={{
+                  labels: [
+                    'Low',
+                    'Medium',
+                    'High'
+                  ],
+                  datasets: [{
+                    data: [chartThreeData?.lows, chartThreeData?.mediums, chartThreeData?.highs],
+                    backgroundColor: [
+                      'rgb(255, 0, 0)',
+                      'rgb(0, 0, 255)',
+                      'rgb(0, 255, 0)'
+                    ],
+                    hoverOffset: 4
+                  }]
+                }}
+              />
+            </Paper>}
           </Container>
         </Grid>
         <Grid item xs={12} lg={6}>
@@ -140,7 +233,32 @@ const Charts = () => {
             }}
             >
             <Paper elevation={10} sx={{ padding: 2 }}>
-              
+              <Typography
+                variant='h5'
+                fontWeight={600}
+                textAlign="center"
+                sx={{ marginBottom: 2 }}
+                >
+                Tickets by Status
+              </Typography>
+              <Pie 
+                data={{
+                  labels: [
+                    'Open',
+                    'In Process',
+                    'Closed'
+                  ],
+                  datasets: [{
+                    data: [chartTwoData?.open, chartTwoData?.inProcess, chartTwoData?.closed],
+                    backgroundColor: [
+                      'rgb(255, 0, 0)',
+                      'rgb(0, 0, 255)',
+                      'rgb(0, 255, 0)'
+                    ],
+                    hoverOffset: 4
+                  }]
+                }}
+              />
             </Paper>
           </Container>
         </Grid>
@@ -153,28 +271,10 @@ const Charts = () => {
               gap: '1.5rem'
             }}
             >
-            <Paper elevation={10} sx={{ padding: 2 }}>
-              
-            </Paper>
-          </Container>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Container
-            sx={{
-              padding: '1.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem'
-            }}
-            >
-            <Paper elevation={10} sx={{ padding: 2 }}>
-              
-            </Paper>
+            
           </Container>
         </Grid>
       </Grid>
-
-      
     </div>
   );
 }
