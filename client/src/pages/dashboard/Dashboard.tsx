@@ -5,6 +5,7 @@ import Projects from "../../components/projects/Projects"
 import Sidebar from "../../components/sidebar/Sidebar"
 import Tickets from "../../components/tickets/Tickets"
 import Users from "../../components/users/Users"
+import Charts from "../../components/charts/Charts"
 import { AuthContext } from "../../contexts/AuthContext"
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +44,7 @@ const Dashboard = () => {
     <>
       <Sidebar />
       <Routes>
+        <Route path="/" element={<Charts />} />
         <Route path="users" element={<Users />} />
         <Route path="projects" element={<Projects />} />
         <Route path="tickets" element={<Tickets />} />

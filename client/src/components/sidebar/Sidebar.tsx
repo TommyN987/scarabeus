@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Drawer from "@mui/material/Drawer";
@@ -12,7 +12,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import TopicIcon from '@mui/icons-material/Topic';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Tooltip from '@mui/material/Tooltip';
 import Menu from '@mui/material/Menu';
@@ -32,12 +32,8 @@ const Sidebar = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (e: any) => {
-    setAnchorEl(e.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = (e: any) => setAnchorEl(e.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
   const handleLogout = async () => {
     try {
@@ -62,7 +58,8 @@ const Sidebar = () => {
         <Tooltip title='Account settings'>
           <AccountCircleIcon 
             fontSize='large'
-            color='action' 
+            color='action'
+            sx={{ cursor: 'pointer'}}
             onClick={handleClick} />
         </Tooltip>
         
@@ -186,13 +183,11 @@ const Sidebar = () => {
         </MenuItem>
         <Divider />
         <MenuItem>
-          Settings
-        </MenuItem>
-        <MenuItem>
           <Button 
             variant='contained'
             color="error"
             size="medium"
+            startIcon={<LogoutIcon />}
             sx={{
               width: '150px',
             }}
