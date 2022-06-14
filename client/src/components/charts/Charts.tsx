@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from 'react';
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
+import Typography from '@mui/material/Typography';
 
 import {
   Chart as ChartJS,
@@ -16,7 +17,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { Project } from '../../types/types';
+import { Project, ChartOneData } from '../../types/types';
 import { fetchAllProjects } from '../../dbOperations/projectOperations'
 
 ChartJS.register(
@@ -33,50 +34,20 @@ const Charts = () => {
   const userContext = useContext(AuthContext);
 
   const [projects, setProjects] = useState<Project[]>([]);
-  const [chartOneData, setChartOneData] = useState<{
-    projects: string[],
-    labels: string[],
-    tickets: {
-      lows: number[],
-      mediums: number[],
-      highs: number[]
-    }
-  }>()
+  const [chartOneData, setChartOneData] = useState<ChartOneData>()
 
-  const options = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Tickets by Projects',
-      },
-    },
-    responsive: true,
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-      },
-    },
-  };
 
   useEffect(() => {
     fetchAllProjects()
-      .then(projects => {
-        if (userContext?.activeUser?.role === 'Admin') {
-          console.log(projects);
-          setProjects(projects);
-        }
-      })
-  }, [userContext?.activeUser])
+      .then(projects => setProjects(projects))
+  }, [])
 
   useEffect(() => {
     const projectsToAdd: string[] = [];
     const labelsToAdd: string[] = ['Low', 'Medium', "High"];
-    let lows: number[] = [];
-    let mediums: number[] = [];
-    let highs: number[] = [];
+    const lows: number[] = [];
+    const mediums: number[] = [];
+    const highs: number[] = [];
     projects.forEach(project => {
       projectsToAdd.push(project.title);
       let low: number = 0;
@@ -119,26 +90,43 @@ const Charts = () => {
             }}
             >
             <Paper elevation={10} sx={{ padding: 2 }}>
-              {chartOneData && <Bar options={options} data={{
-                labels: chartOneData?.projects,
-                datasets: [
-                  {
-                    label: chartOneData?.labels[0],
-                    data: [...chartOneData!.tickets!.lows],
-                    backgroundColor: 'rgb(255, 99, 132)'
+              <Typography
+                variant='h5'
+                fontWeight={600}
+                textAlign="center"
+                sx={{ marginBottom: 2 }}
+                >
+                Tickets by Project and Priority
+              </Typography>
+              {chartOneData && 
+              <Bar 
+                options={{
+                  responsive: true,
+                  scales: {
+                    x: { stacked: true },
+                    y: { stacked: true },
                   },
-                  {
-                    label: chartOneData?.labels[1],
-                    data: [...chartOneData!.tickets!.mediums],
-                    backgroundColor: 'rgb(75, 192, 192)'
-                  },
-                  {
-                    label: chartOneData?.labels[2],
-                    data: [...chartOneData!.tickets!.highs],
-                    backgroundColor: 'rgb(53, 162, 235)'
-                  },
-                ]
-              }} />}
+                }} 
+                data={{
+                  labels: chartOneData?.projects,
+                  datasets: [
+                    {
+                      label: chartOneData?.labels[0],
+                      data: [...chartOneData!.tickets!.lows],
+                      backgroundColor: 'rgb(255, 99, 132)'
+                    },
+                    {
+                      label: chartOneData?.labels[1],
+                      data: [...chartOneData!.tickets!.mediums],
+                      backgroundColor: 'rgb(75, 192, 192)'
+                    },
+                    {
+                      label: chartOneData?.labels[2],
+                      data: [...chartOneData!.tickets!.highs],
+                      backgroundColor: 'rgb(53, 162, 235)'
+                    },
+                  ]
+                }} />}
             </Paper>
           </Container>
         </Grid>

@@ -51,3 +51,13 @@ export type Ticket = {
 export type CloseButtonProps = {
   onClick: Function
 }
+
+export type ChartOneData = {
+  projects: string[],
+  labels: string[],
+  tickets: {
+    lows: number[],
+    mediums: number[],
+    highs: number[]
+  }
+}
