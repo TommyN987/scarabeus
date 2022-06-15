@@ -67,5 +67,4 @@ export const deleteComment = async (project: string, ticket: string, _id: string
       _id: _id
     })
   })
-  console.log(project, ticket, _id)
 }

@@ -40,8 +40,8 @@ const Sidebar = () => {
       await logoutUser();
       userContext?.setActiveUser(null);
       navigate('/');
-    } catch(err: any) {
-      console.log(err.message)
+    } catch (err: any) {
+      alert(err.message);
     }
   }
 

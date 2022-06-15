@@ -82,7 +82,7 @@ const Tickets = () => {
         await addTicket(activeProject!.title, ticketTitle, ticketDescription, ticketPriority, userContext?.activeUser.name)
       }
     } catch (err: any) {
-      console.log(err.message);
+      alert(err.message);
     }
     setTrigger(trigger => !trigger);
     setActiveProject(null);
@@ -103,7 +103,7 @@ const Tickets = () => {
       setActiveProject(null);
       setTrigger(trigger => !trigger);
     } catch (err: any) {
-      console.log(err.message)
+      alert(err.message);
     }
   };
 
@@ -122,7 +122,7 @@ const Tickets = () => {
         await addComment(project, title, userContext.activeUser.name, message);
       }
     } catch (err: any) {
-      console.log(err.message)
+      alert(err.message);
     }
     setComment('');
     setTrigger(trigger => !trigger);
@@ -135,7 +135,7 @@ const Tickets = () => {
       setTrigger(trigger => !trigger);
       activeProject && await handleTicketReload(activeProject, ticket);
     } catch (err: any) {
-      console.log(err.message)
+      alert(err.message);
     }
   }
 
@@ -157,7 +157,7 @@ const Tickets = () => {
           setAllProjects(projectsToDisplay);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   }, [userContext, trigger])
 
   return (

@@ -113,8 +113,8 @@ const Projects = () => {
         personnel: newProjectPersonnel,
         tickets: [],
       });
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (err: any) {
+      alert(err.message);
     }
 
     // UPDATES USER OBJECTS' PROJECT FIELDS WITH THE NEW PROJECT
@@ -122,8 +122,8 @@ const Projects = () => {
       newProjectPersonnel.forEach((username) => {
         updateUserProjects(username, newProjectTitle);
       });
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (err: any) {
+      alert(err.message);
     }
     setNewProjectTitle('');
     setNewProjectDescription('');
@@ -153,8 +153,8 @@ const Projects = () => {
     try {
       await editProject(activeProject!.title, newProjectTitle, newProjectDescription, newProjectPersonnel);
       await handleProjectsEditInUser(usersToUpdate, activeProject!.title)
-    } catch(err: any) {
-      console.log(err.message)
+    } catch (err: any) {
+      alert(err.message);
     }
 
     setActiveProject(null);
@@ -194,7 +194,7 @@ const Projects = () => {
           setAllProjects(projectsToDisplay);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   }, [trigger, userContext]);
 
   return (

@@ -56,8 +56,8 @@ const Register = () => {
       await createUser(newUser);
       userContext?.setActiveUser(newUser);
       navigate('/dashboard');
-    } catch(err: any) {
-      console.log(err.message)
+    } catch (err: any) {
+      alert(err.message);
     }
   }
   

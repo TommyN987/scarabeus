@@ -34,7 +34,7 @@ const Profile = () => {
           setProjects(projectsToDisplay);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   }, [userContext]);
 
   useEffect(() => {

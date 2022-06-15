@@ -32,7 +32,6 @@ const Login = () => {
       });
       navigate('/dashboard');      
     } catch(err: any) {
-      console.log(err.message);
       alert('Invalid email or password');
     }
   }
