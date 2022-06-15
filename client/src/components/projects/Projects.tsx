@@ -152,6 +152,11 @@ const Projects = () => {
 
     try {
       await editProject(activeProject!.title, newProjectTitle, newProjectDescription, newProjectPersonnel);
+    } catch (err: any) {
+      alert(err.message);
+    }
+
+    try {
       await handleProjectsEditInUser(usersToUpdate, activeProject!.title)
     } catch (err: any) {
       alert(err.message);

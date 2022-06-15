@@ -78,6 +78,7 @@ export const handleProjectsEdit = async (req, res) => {
       }
       user.save();
     })
+    res.status(200).json();
   } catch (err) {
     res.status(404).json({ message: err.message})
   }
