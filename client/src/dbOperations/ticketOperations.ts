@@ -1,5 +1,7 @@
+import { path } from "./path";
+
 export const addTicket = async (project: string, title: string, description: string, priority: string, submitter: string) => {
-  await fetch('http://localhost:5000/dashboard/tickets', {
+  await fetch(`${path}/dashboard/tickets`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -17,7 +19,7 @@ export const addTicket = async (project: string, title: string, description: str
 };
 
 export const updateTicket = async (project: string, title: string, priority: string, status: string, solver: string) => {
-  await fetch('http://localhost:5000/dashboard/tickets/update', {
+  await fetch(`${path}/dashboard/tickets/update`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -35,7 +37,7 @@ export const updateTicket = async (project: string, title: string, priority: str
 };
 
 export const addComment = async (project: string, title: string, commenter: string, message: string) => {
-  await fetch('http://localhost:5000/dashboard/tickets/comment', {
+  await fetch(`${path}/dashboard/tickets/comment`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -54,7 +56,7 @@ export const addComment = async (project: string, title: string, commenter: stri
 }
 
 export const deleteComment = async (project: string, ticket: string, _id: string) => {
-  await fetch('http://localhost:5000/dashboard/tickets/delete', {
+  await fetch(`${path}/dashboard/tickets/delete`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
