@@ -64,62 +64,20 @@ export const removeUserProjects = async (req, res) => {
 }
 
 export const handleProjectsEdit = async (req, res) => {
-  
-  function symmetricDifference(setA, setB) {
-    let _difference = new Set(setA)
-    for (let elem of setB) {
-        if (_difference.has(elem)) {
-            _difference.delete(elem)
-        } else {
-            _difference.add(elem)
-        }
-    }
-    return _difference
-  }
+
+  const usersToUpdate = req.body.usersToUpdate;
+  const project = req.body.project;
 
   try {
-    const users = await User.find();
-    console.log(users)
-    const prevPersonnel = req.body.prevPersonnel;
-    console.log(prevPersonnel);
-    const newPersonnel = req.body.newPersonnel;
-    const project = req.body.project;
-
-    const prevPersonnelSet = new Set(prevPersonnel);
-    const newPersonnelSet = new Set(newPersonnel);
-    console.log(prevPersonnelSet)
-
-    const setDifference = symmetricDifference(prevPersonnelSet, newPersonnelSet);
-    const personnelToUpdate = [...setDifference];
-
-    const userObjects = [];
-
-    personnelToUpdate.forEach(user => {
-      userObjects.push(users.find(personnel => personnel.name === user));
-    });
-
-
-    userObjects.forEach(user => {
-      if ((user.projects.indexOf(project)) === -1) {
-        user.projects.push(project)
+    usersToUpdate.forEach(async (person) => {
+      const user = await User.findOne({ name: person })
+      if (user.projects.includes(project)) {
+        user.projects.splice(user.projects.indexOf(project), 1)
       } else {
-        user.projects.splice(user.projects.indexOf(project), 1);
+        user.projects.push(project);
       }
-    });
-
-    console.log(userObjects)
-
-    users.forEach(oldUser => {
-      userObjects.forEach(newUser => {
-        if (oldUser.name === newUser.name) {
-          oldUser.projects.splice(0, oldUser.projects.length, [...newUser.projects]);
-          oldUser.save();
-        }
-      })
+      user.save();
     })
-
-    res.status(200).json(users);
-
   } catch (err) {
     res.status(404).json({ message: err.message})
   }

@@ -132,13 +132,27 @@ const Projects = () => {
     setTrigger((trigger) => !trigger);
   };
 
+  const symmetricDifference = (setA: string[], setB: string[]) => {
+    let _difference = new Set(setA)
+    for (let elem of setB) {
+        if (_difference.has(elem)) {
+            _difference.delete(elem)
+        } else {
+            _difference.add(elem)
+        }
+    }
+    return _difference
+  }
+
   const handleEdit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    const setDifference = symmetricDifference(activeProject!.personnel, newProjectPersonnel);
+    const usersToUpdate = [...setDifference];
 
     try {
       await editProject(activeProject!.title, newProjectTitle, newProjectDescription, newProjectPersonnel);
-      await handleProjectsEditInUser(activeProject!.personnel, newProjectPersonnel, activeProject!.title);
-      console.log(activeProject)
+      await handleProjectsEditInUser(usersToUpdate, activeProject!.title)
     } catch(err: any) {
       console.log(err.message)
     }
