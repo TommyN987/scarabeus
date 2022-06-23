@@ -2,7 +2,7 @@
 
 ## A MERN stack application
 
-Scarabeus is an issue tracker / bug tracker application built with React and TypeScript on the front end, Node.js and Express on the back end, MongoDB as database and Firebase for authentication.
+Scarabeus is an issue tracker / bug tracker application built with React and TypeScript on the front end, Node.js and Express on the back end, MongoDB as database and Firebase for authentication. I utilized the Material UI library for the application's styling, and the Chart.js library for the charts on the dashboard's landing page.
 
 ![login](https://user-images.githubusercontent.com/96293671/175386441-887c55bf-4174-4199-b9a4-1c633b923a2b.png)
 
